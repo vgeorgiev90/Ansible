@@ -6,3 +6,6 @@
   apt: pkg={{ debian_apache }} state=latest
   notify: webserver2
   when: "ansible_os_family == 'Debian'"
+- name: local action
+  local_action: echo "Local Action" > /home/test/file.out
+
