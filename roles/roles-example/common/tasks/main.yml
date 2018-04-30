@@ -1,0 +1,5 @@
+- name: update the system
+  yum: name=* state=latest
+  register: out
+- debug: msg={{ out }}
+- debug: msg={{ message }}

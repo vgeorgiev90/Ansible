@@ -1,0 +1,22 @@
+--- # EC2 group modeule example
+- hosts: localhost
+  connection: local
+  remote_user: test
+  gather_facts: no
+  tasks:
+  - name: Basic group creation
+    ec2_group:
+      region: us-east-1
+      name: AnsibleTestGroup
+      description: This is a test ansible security group
+      vpc_id: vpc-1609d16d
+      rules:
+        - proto: tcp
+          from_port: 80
+          to_port: 80
+          cidr_ip: 0.0.0.0/0
+      rules_egress:
+        - proto: tcp
+          from_port: 80
+          to_port: 80
+          cidr_ip: 0.0.0.0/0

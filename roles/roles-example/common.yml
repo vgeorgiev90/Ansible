@@ -1,0 +1,12 @@
+--- # Master playbook for Common Role
+- hosts: aws
+  remote_user: test
+  become: yes
+  connection: ssh
+  gather_facts: yes
+  pre_tasks:
+  - debug: msg="This is a pre task message"
+  roles:
+  - common
+  post_tasks:
+  - debug: msg="This is a test post task message"

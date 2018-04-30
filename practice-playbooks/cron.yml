@@ -1,0 +1,15 @@
+--- # Ansible example cron playbook
+- hosts: aws
+  remote_user: test
+  become: yes
+  gather_facts: yes
+  connection: ssh
+  tasks:
+  - name: set test cron job
+    cron:
+      name: test cron job
+      minute: "*"
+      hour: "*"
+      job: ls -la /dev > /home/test/cron.log
+  - name: remove the cron job
+    cron: name="test cron job" state=absent

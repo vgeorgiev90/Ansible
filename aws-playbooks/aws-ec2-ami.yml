@@ -1,0 +1,17 @@
+--- # Ec2 AMi creation example
+- hosts: localhost
+  connection: local
+  remote_user: test
+  become: yes
+  gather_facts: no
+  tasks:
+  - name: Basic AMI creation from ec2 instance
+    ec2_ami:
+      region: us-east-1
+      instance_id: i-0f3b63e980763fbe5
+      wait: no
+      name: ansibleami
+      tags:
+        Name: AnsibleAMI
+        Service: TestAMIservice
+    register: instance

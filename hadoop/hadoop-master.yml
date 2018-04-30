@@ -1,0 +1,52 @@
+--- # Ansible playbook to set hadoop master
+- hosts: localhost
+  remote_user: ansible
+  become: yes
+  gather_facts: yes
+  connection: local
+
+  tasks:
+  - name: Install JDK and JRE
+    yum: pkg=java-1.8.0-openjdk-devel state=installed
+  - yum: pkg=java-1.8.0-openjdk-headless state=installed
+  - name: download hadoop
+    shell: wget http://apache.cbox.biz/hadoop/common/hadoop-3.1.0/hadoop-3.1.0.tar.gz
+  - name: unpack and rename hadoop
+    shell: mv hadoop-3.1.0.tar.gz /home/ansible/ && tar -xzf /home/ansible/hadoop-3.1.0.tar.gz && mv hadoop-3.1.0 /home/ansible/hadoop && chown -R ansible:ansible /home/ansible/
+  - name: set the path for hadoop binaries
+    shell: echo "PATH=/home/ansible/hadoop/bin:/home/ansible/hadoop/sbin:$PATH" >> /home/ansible/.bashrc && echo "PATH=/home/ansible/hadoop/bin:/home/ansible/hadoop/sbin:$PATH" >> /home/ansible/.bash_profile
+  - name: set java home
+    shell: ls -l /etc/alternatives/java | awk '{print $11}' | awk -F"/" '{for(i=1;i<=NF-2;i++) printf $i"/"}' | sed "s,/$,," > /tmp/java
+    register: java
+  - set_fact:
+      java_home: "{{ java['stdout_lines'] }}"
+  - name: copy the config templates
+    copy:
+      src: /etc/ansible/playbooks/hadoop_templates/core-site.xml
+      dest: /home/ansible/hadoop/etc/hadoop/core-site.xml
+      owner: ansible
+      group: ansible
+      mode: 0640
+  - copy:
+      src: /etc/ansible/playbooks/hadoop_templates/hdfs-site.xml
+      dest: /home/ansible/hadoop/etc/hadoop/hdfs-site.xml
+      owner: ansible
+      group: ansible
+      mode: 0640
+  - copy:
+      src: /etc/ansible/playbooks/hadoop_templates/yarn-site.xml
+      dest: /home/ansible/hadoop/etc/hadoop/yarn-site.xml
+      owner: ansible
+      group: ansible
+      mode: 0640
+  - copy:
+      src: /etc/ansible/playbooks/hadoop_templates/mapred-site.xml
+      dest: /home/ansible/hadoop/etc/hadoop/mapred-site.xml
+      owner: ansible
+      group: ansible
+      mode: 0640
+  - name: Modify the workers file
+    shell: echo "hadoop-node1" > /home/ansible/hadoop/etc/hadoop/workers && echo "hadoop-node2" >> /home/ansible/hadoop/etc/hadoop/workers
+  - name: modify the java home in the hadoop main config file
+    shell: echo "export JAVA_HOME=`cat /tmp/java`" >> /home/ansible/hadoop/etc/hadoop/hadoop-env.sh && rm -rf /tmp/java
+

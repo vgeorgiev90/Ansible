@@ -1,0 +1,13 @@
+--- # Ansible example playbook for command module
+- hosts: aws
+  remote_user: test
+  become: yes
+  connection: ssh
+  gather_facts: no
+  tasks:
+  - name: run the command with arguments
+    command: /bin/echo "Kvo staa" > output.out
+    args:
+      chdir: /tmp/
+    register: out
+  - debug: msg={{ out }}

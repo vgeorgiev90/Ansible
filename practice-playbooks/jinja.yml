@@ -1,0 +1,16 @@
+--- # Ansible example playbook for Jinja2
+- hosts: aws
+  remote_user: test
+  connection: ssh
+  become: yes
+  gather_facts: yes
+  tasks:
+  vars:
+    userName: test
+    userPassword: test123
+    connectionType: SFTP
+  tasks:
+  - name: install config file customized with variables
+    template: src=jinja-templates/file.conf dest=/home/test/test.conf owner=test group=test mode=640
+    register: out
+  - debug: msg={{ out }}

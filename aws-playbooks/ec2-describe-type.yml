@@ -1,0 +1,11 @@
+--- # Ec2 describe instace test
+- hosts: aws
+  remote_user: test
+  become: yes
+  gather_facts: yes
+  connection: ssh
+  tasks:
+  - name: Gather ec2 facts
+    action: ec2_facts
+  - name: Display json
+    debug: msg='{{ ansible_ec2_instance_type }}'

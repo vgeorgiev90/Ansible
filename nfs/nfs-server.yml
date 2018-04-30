@@ -1,0 +1,32 @@
+--- # Ansible playbook for NSF setup
+- hosts: aws
+  remote_user: test
+  become: yes
+  connection: ssh
+  gather_facts: yes
+  vars_files:
+    - nfs-vars/vars.yml
+  tasks:
+  - name: install NSF utilitis and packages
+    yum: pkg=nfs-utils state=latest
+  - yum: pkg=nfs-utils-lib state=latest
+  - yum: pkg=portreserve state=latest
+    register: install
+  - debug: var={{ install }}
+  - name: portreserve modify for start
+    shell: touch /etc/portreserve/spamd && echo 783 > /etc/portreserve/spamd
+  - name: start services
+    service: name=portreserve state=restarted
+  - name: Create dir for export
+    shell: mkdir /nfs-export
+  - name: Export the directory in /etc/exports
+    shell: echo '/nfs-export {{ ip_client }}(rw,sync,no_root_squash)' > /etc/exports
+  - name: Start nsf service
+    service: name=nfs state=restarted
+  - name: export the directory for the client
+    shell: exportfs -a
+  - name: Check that service is running
+    shell: service nfs status
+    register: service
+  - debug: msg={{ service }}
+

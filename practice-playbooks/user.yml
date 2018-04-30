@@ -1,0 +1,12 @@
+--- # Ansible user modeule example playbook
+- hosts: aws
+  remote_user: test
+  become: yes
+  connection: ssh
+  gather_facts: no
+  tasks:
+  - name: add user to the remote system
+    user: name=ansible-test-user state=present group=root shell=/sbin/nologin
+    register: out
+  - debug: msg={{ out }}
+

@@ -1,0 +1,19 @@
+--- # Ansible playbook for NFS client set up
+- hosts: nfs-client
+  remote_user: test
+  become: yes
+  connection: ssh
+  gather_facts: yes
+  vars_files:
+    - nfs-vars/vars.yml
+  tasks:
+  - name: install nfs utils
+    yum: name=nfs-utils state=latest
+  - yum: name=nfs-utils-lib state=latest
+  - name: Create dir to mount nfs share
+    shell: mkdir /mnt/nfs-export
+  - name: mount the NFS client
+    shell: mount -t nfs {{ ip_server }}:/nfs-export /mnt/nfs-export
+    register: mount
+  - debug: msg={{ mount }}
+

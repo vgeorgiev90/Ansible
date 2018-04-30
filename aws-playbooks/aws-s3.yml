@@ -1,0 +1,25 @@
+--- # AWS S3 module example
+- hosts: localhost
+  remote_user: test
+  connection: local
+  become: yes
+  gather_facts: no
+  tasks:
+  - name: Create S3 test bucket
+    s3:
+      region: us-east-1
+      bucket: ansible-playbook-test-bucket
+      mode: create
+      permission: public-read-write
+    register: create_bucket
+  - name: Copy to bucket
+    s3:
+      region: us-east-1
+      bucket: ansible-playbook-test-bucket
+      object: aws-s3.yml
+      src: /etc/ansible/playbooks/aws-playbooks/aws-s3.yml
+      mode: put
+    register: copy_files
+  - debug: msg={{ create_bucket }}
+  - debug: msg={{ copy_files }}
+

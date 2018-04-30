@@ -1,0 +1,54 @@
+--- # Wordpress installer with httpd and mysql
+- hosts: aws
+  become: yes
+  connection: ssh
+  gather_facts: yes
+  tasks:
+  - name: Install httpd
+    yum:
+      name: httpd
+      state: latest
+  - name: Install mysql
+    yum:
+      name: mysql-server
+      state: latest
+  - name: mysql client
+    yum:
+      name: mysql
+      state: latest
+  - name: php
+    yum:
+      name: php
+      state: latest
+  - name: php-mysql
+    yum:
+      name: php-mysql
+      state: latest
+  - name: mysql
+    shell: service mysqld start
+  - name: wordpress download
+    shell: wget https://wordpress.org/latest.tar.gz
+  - name: move to dir
+    shell: tar -xzf latest.tar.gz && cp -R wordpress/ /var/www/html/
+  - name: mysql base
+    mysql_db:
+      name: wordpress
+      state: present
+  - name: mysql user
+    mysql_user:
+      name: wordpress
+      host: 'localhost'
+      password: 'viktor'
+      priv: 'wordpress.*:ALL'
+      state: present
+  - name: wp-config
+    shell: cp /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-config.php
+  - name: sed
+    shell: sed -i 's/database_name_here/wordpress/' /var/www/html/wordpress/wp-config.php && sed -i 's/username_here/wordpress/' /var/www/html/wordpress/wp-config.php && sed -i 's/password_here/viktor/' /var/www/html/wordpress/wp-config.php
+  - name: apache
+    shell: service httpd start
+
+
+
+
+    

@@ -1,0 +1,14 @@
+--- # Ansible playbook to distribute and install splunk universal forwarder and ossec-hids software
+- hosts: gdpr-test
+  remote_user: ansible
+  connection: ssh
+  become: yes
+  gather_facts: yes
+  vars:
+    server_ip: 10.0.30.44
+    index: internal_gdpr_reporting_index
+  tasks:
+  - include: plays/ossec.yml
+    when: ansible_system == 'Linux'
+  - include: plays/forwarder.yml
+    when: ansible_system == 'Linux'

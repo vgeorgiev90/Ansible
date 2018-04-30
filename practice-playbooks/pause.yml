@@ -1,0 +1,15 @@
+--- # Ansible example playbook for pause module
+- hosts: aws
+  remote_user: test
+  connection: ssh
+  become: yes
+  gather_facts: no
+  tasks:
+  - name: install httpd
+    action: yum name=httpd state=latest
+  - name: Pause  
+    pause:
+      prompt: "Make sure installation is complete..."
+  - name: Verify lynx installation
+    action: yum name=lynx state=latest
+    

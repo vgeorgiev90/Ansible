@@ -1,0 +1,8 @@
+--- # Ansible example for lookups
+- hosts: aws
+  remote_user: test
+  become: yes
+  gather_facts: no
+  connection: ssh
+  tasks:
+  - debug: msg="Lookup from the file {{ lookup('env','HOME') }}"

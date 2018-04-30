@@ -1,0 +1,10 @@
+--- # Ansible AT example
+- hosts: aws
+  remote_user: test
+  become: yes
+  connection: ssh
+  gather_facts: yes
+  tasks:
+  - name: AT task
+    at: command="ls -l /var > /home/test/at.log" count=1 units="minutes"
+

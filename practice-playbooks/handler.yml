@@ -1,0 +1,13 @@
+--- # example playbook for handlers
+- hosts: aws
+  remote_user: test
+  become: yes
+  gather_facts: yes
+  connection: ssh
+  tasks:
+  - name: install apache
+    action: yum name=httpd state=installed
+    notify: Restart Httpd
+  handlers:
+    - name: Restart Httpd
+      action: service name=httpd state=restarted

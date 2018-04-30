@@ -1,0 +1,16 @@
+--- # VPS create playbook
+- hosts: localhost
+  remote_user: test
+  connection: local
+  become: yes
+  gather_facts: no
+  tasks:
+  - name: Create basic VPC
+    ec2_vpc:
+      region: us-east-1
+      state: present
+      cidr_block: 172.16.0.0/16
+      resource_tags:
+        Name: Ansible-test-vpc
+    register: vpcblock
+  - debug: msg={{ vpcblock }}

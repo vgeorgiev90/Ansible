@@ -1,0 +1,13 @@
+--- # Ansible loop example playbook
+- hosts: aws
+  remote_user: test
+  become: yes
+  gather_facts: yes
+  connection: ssh
+  tasks:
+  - name: add list of users
+    user: name={{ item }} state=present
+    with_items:
+      - rusko
+      - stefan
+      - ioana  

@@ -1,0 +1,16 @@
+--- # ec2 key module example
+- hosts: control
+  connection: local
+  remote_user: test
+  become: yes
+  gather_facts: no
+  vars_files:
+  - files/awscreds.yml
+  tasks:
+  - name: create new key pair MyAnsibleKeyTest
+    ec2_key:
+      aws_access_key: "{{ aws_id }}"
+      aws_secret_key: "{{ aws_key }}"
+      name: MyAnsibleKeyTest
+      region: us-east-1
+      state: absent

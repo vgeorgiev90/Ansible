@@ -1,0 +1,27 @@
+--- # Ansible playbook to set up hadoop for the slaves
+- hosts: nodes
+  remote_user: ansible
+  become: yes
+  gather_facts: yes
+  connection: ssh
+  tasks:
+  - name: Install JDK and JRE
+    yum: pkg=java-1.8.0-openjdk-devel state=installed
+  - yum: pkg=java-1.8.0-openjdk-headless state=installed
+  - name: Copy the hadoop binaries to the nodes
+    copy:
+      src: /home/ansible/hadoop-3.1.0.tar.gz
+      dest: /home/ansible/hadoop-3.1.0.tar.gz
+      owner: ansible
+      group: ansible
+  - name: unzip the hadoop tarball
+    shell: tar -xzf /home/ansible/hadoop-3.1.0.tar.gz && mv /home/ansible/hadoop-3.1.0 /home/ansible/hadoop
+  - name: Copy the hadoop config files
+    copy: src=/etc/ansible/playbooks/hadoop_templates/core-site.xml  dest=/home/ansible/hadoop/etc/hadoop/core-site.xml
+  - copy: src=/etc/ansible/playbooks/hadoop_templates/hdfs-site.xml  dest=/home/ansible/hadoop/etc/hadoop/hdfs-site.xml
+  - copy: src=/etc/ansible/playbooks/hadoop_templates/mapred-site.xml  dest=/home/ansible/hadoop/etc/hadoop/mapred-site.xml
+  - copy: src=/etc/ansible/playbooks/hadoop_templates/yarn-site.xml  dest=/home/ansible/hadoop/etc/hadoop/yarn-site.xml
+  - copy: src=/home/ansible/hadoop/etc/hadoop/hadoop-env.sh  dest=/home/ansible/hadoop/etc/hadoop/hadoop-env.sh
+  - copy: src=/home/ansible/hadoop/etc/hadoop/workers  dest=/home/ansible/hadoop/etc/hadoop/workers
+  - name: Change owner to be ansible user
+    shell: chown -R ansible:ansible /home/ansible

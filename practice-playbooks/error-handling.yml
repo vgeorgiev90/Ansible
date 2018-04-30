@@ -1,0 +1,14 @@
+--- # Ansible basic error handling example playbook
+- hosts: aws
+  remote_user: test
+  connection: ssh
+  become: yes
+  gather_facts: yes
+  tasks:
+  - name: Generate error
+    shell: /bin/false
+    ignore_errors: yes
+  - name: Go on with the tasts
+    yum: pkg=telnet state=latest
+    register: output
+  - debug: msg={{ output }}

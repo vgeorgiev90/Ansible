@@ -1,0 +1,14 @@
+--- # AWS test playbook
+- hosts: aws
+  remote_user: test
+  become: yes
+  gather_facts: yes
+  connection: ssh
+  tasks:
+  - name: Create file
+    shell: touch /tmp/playbook-file
+  - name: Execute ls
+    shell: ls -al /tmp
+    register: result
+  - name: Display json
+    debug: var=result

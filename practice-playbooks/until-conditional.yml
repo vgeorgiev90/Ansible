@@ -1,0 +1,16 @@
+--- # Ansible until conditional example playbook
+- hosts: aws
+  remote_user: test
+  become: yes
+  gather_facts: yes
+  connection: ssh
+  tasks:
+  - name: install apache web server
+    yum: pkg=httpd state=latest
+  - name: check httpd status
+    shell: service httpd status
+    register: result
+    until: result.stdout.find("running") != -1             ## Run this until the status is error
+    retries: 5                                             ## how many times to run the task
+    delay: 5                                               ## delay each run in seconds
+  - debug: msg={{ result }}

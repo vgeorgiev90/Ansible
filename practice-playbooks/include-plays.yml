@@ -1,0 +1,11 @@
+--- # Ansible include example playbook
+- hosts: aws
+  remote_user: test
+  become: yes
+  gather_facts: yes
+  connection: ssh
+  tasks:
+  - include: play-includes/packages.yml
+  - name: verify telnet 
+    raw: yum list installed | grep telnet > /home/test/pkg.log
+  - shell: cat /home/test/pkg.log

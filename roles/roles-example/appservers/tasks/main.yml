@@ -1,0 +1,8 @@
+- name: Install Httpd
+  yum: name={{ redhat_apache }} state=latest
+  notify: webserver
+  when: "ansible_os_family == 'RedHat'"
+- name: install debian httpd
+  apt: pkg={{ debian_apache }} state=latest
+  notify: webserver2
+  when: "ansible_os_family == 'Debian'"

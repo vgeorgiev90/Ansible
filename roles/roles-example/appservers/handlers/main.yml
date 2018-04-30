@@ -1,0 +1,10 @@
+- name: webserver
+  service: name={{ redhat_apache }} state=restarted
+  register: out
+  when: "ansible_os_family == 'RedHat'"
+- name: webserver2
+  service: nam{{ debian_apache }} state=restarted
+  register: out
+  when: "ansible_os_family == 'Debian'"
+- debug: msg={{ out }}
+- debug: msg={{ message }}

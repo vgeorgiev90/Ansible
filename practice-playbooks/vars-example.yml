@@ -1,0 +1,27 @@
+--- # Variables for playbooks
+- hosts: aws
+  remote_user: test
+  connection: ssh
+  become: yes
+  gather_facts: yes
+  vars:
+    test_var: This-is-a-test-var
+  vars_files:
+    - /etc/ansible/playbooks/general-playbooks/variables/vars.yml
+  vars_prompt:
+    - name: domain
+      prompt: Domain ?
+      default: telnet
+      private: no
+  tasks:
+  - name: Testing the variables
+    shell: touch {{ test_var }}
+    register: touch_result
+  - debug: msg={{ touch_result }}
+  - name: Test more vars
+    shell: touch {{ domain }}
+    register: result
+  - debug: msg={{ result }}
+  - name: var file test
+    shell: touch {{ name }}
+

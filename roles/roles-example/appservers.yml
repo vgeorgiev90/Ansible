@@ -1,0 +1,8 @@
+--- # Master Playbook for appservers Role
+- hosts: aws
+  remote_user: test
+  become: yes
+  connection: ssh
+  gather_facts: yes
+  roles:
+  - appservers

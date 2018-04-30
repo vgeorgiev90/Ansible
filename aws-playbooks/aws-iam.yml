@@ -1,0 +1,20 @@
+--- # AWS IAM module example
+- hosts: localhost
+  connection: local
+  remote_user: test
+  become: yes
+  gather_facts: no
+  tasks:
+  - name: Create User in IAM
+    iam:
+      region: us-east-1
+      iam_type: user
+      name: "{{ item }}"
+      state: present
+      password: "IamUser!@#123"
+      access_key_state: create
+    with_items:
+    - user1
+    - user2
+    register: output
+  - debug: msg={{ output }}

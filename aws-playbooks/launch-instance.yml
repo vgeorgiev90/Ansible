@@ -1,0 +1,13 @@
+--- # EC2 provisioning playbook
+- hosts: localhost
+  connection: local
+  remote_user: test
+  become: yes
+  gather_facts: no
+  tasks:
+  - name: Basic provision t2.micro ec2 instances
+    ec2:
+      region: us-east-1
+      image: ami-1853ac65
+      instance_type: t2.micro
+      count: 2

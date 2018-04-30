@@ -1,0 +1,19 @@
+--- # Apache install test
+- hosts: control
+  remote_user: test
+  become: yes
+  gather_facts: yes
+  connection: ssh
+  tasks:
+  - name: install apache
+    yum:
+      name: telnet
+      state: latest
+  - name: asd
+    yum:
+      name: httpd
+      state: latest
+  - name: sdfg
+    yum:
+      name: htop
+      state: latest

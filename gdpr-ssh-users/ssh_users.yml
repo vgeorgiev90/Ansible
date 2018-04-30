@@ -1,0 +1,10 @@
+--- # Restrict certain users for ssh access
+- hosts: aws
+  remote_user: test
+  become: yes
+  connection: ssh
+  gather_facts: no
+  tasks:
+  - name: Change the shell for user
+    shell: chsh {{ item }} -s /sbin/nologin
+    with_lines: cat files/users.txt 

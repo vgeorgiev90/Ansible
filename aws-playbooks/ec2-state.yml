@@ -1,0 +1,12 @@
+--- # Playbook to manage start,stop,terminate ec2 instances
+- hosts: localhost
+  connection: local
+  remote_user: test
+  become: yes
+  gather_facts: no
+  tasks:
+  - name: manage the state of instance
+    ec2:
+      region: eu-west-3
+      instance_ids: i-03c4d0e182bd0b360
+      state: stopped 

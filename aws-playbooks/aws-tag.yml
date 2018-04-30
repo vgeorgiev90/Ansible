@@ -1,0 +1,16 @@
+--- # EC2 tag module
+- hosts: localhost
+  connection: local
+  remote_user: test
+  become: yes
+  gather_facts: no
+  tasks:
+  - name: adding tag to existing instance
+    ec2_tag:
+      region: us-east-1
+      resource: i-058a36866d9adceab
+      state: present
+      tags:
+        Name: Ansible_test_server
+    register: voltags
+  - debug: msg={{ voltags }}

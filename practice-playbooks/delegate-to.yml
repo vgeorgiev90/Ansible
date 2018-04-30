@@ -1,0 +1,13 @@
+--- # Ansible delegate_to example playbook
+- hosts: aws
+  remote_user: test
+  connection: ssh
+  become: yes
+  gather_facts: yes
+  tasks:
+  - name: Run a remote ping on the server
+    command: echo "DELEGATE" > /home/test/ping.out
+    delegate_to: 127.0.0.1
+  - name: install a package
+    yum: pkg=telnet state=latest
+

@@ -1,0 +1,16 @@
+--- # EC2 snapshot module 
+- hosts: localhost
+  connection: local
+  remote_user: test
+  become: yes
+  gather_facts: no
+  tasks:
+  - name: Take a snapshot of instance volume
+    ec2_snapshot:
+      region: us-east-1
+      instance_id: i-058a36866d9adceab
+      device_name: /dev/xvda
+      description: This is ansible test snapshot
+      wait: no
+    register: snapshot
+  - debug: msg={{ snapshot }}

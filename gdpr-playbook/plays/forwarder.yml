@@ -1,0 +1,19 @@
+  - name: Copy splunk forwarder to the server
+    copy: src=splunk-forwarder/splunkforwarder.tgz dest=/tmp/splunkforwarder.tgz owner=svc_ansible.aaam mode=0664
+  - name: Untar the forwarder
+    shell: tar -xzf /tmp/splunkforwarder.tgz -C /tmp
+  - shell: mv /tmp/splunkforwarder /opt/splunkforwarder-gdpr
+    register: output
+  - debug: msg={{ output }}
+  - name: Copy forwarder config files
+    template: src=conf-files/outputs.conf dest=/opt/splunkforwarder-gdpr/etc/system/local/outputs.conf owner=svc_ansible.aaam group=svc_ansible.aaam mode=0644
+  - template: src=conf-files/inputs.conf dest=/opt/splunkforwarder-gdpr/etc/system/local/inputs.conf owner=svc_ansible.aaam group=svc_ansible.aaam mode=0644
+  - name: Change the forwarder managment port to 10089
+    shell: sed -i 's/mgmtHostPort = 127.0.0.1:8089/mgmtHostPort = 127.0.0.1:10089/' /opt/splunkforwarder-gdpr/etc/system/default/web.conf
+  - shell: setfacl -m "u:svc_ansible.aaam:r--" /var/log/secure
+  - name: Change the ownership of the fowarder to be ansible user
+    shell: chown -R svc_ansible.aaam:svc_ansible.aaam /opt/splunkforwarder-gdpr/*
+  - name: Start the forwarder
+    shell: /opt/splunkforwarder-gdpr/bin/splunk start --accept-license --no-prompt
+    register: reply
+  - debug: msg={{ reply }}

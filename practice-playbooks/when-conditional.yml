@@ -1,0 +1,14 @@
+--- # Ansible when conditional example playbook
+- hosts: aws
+  remote_user: test
+  become: yes
+  gather_facts: yes
+  connection: ssh
+  vars:
+    playbook_type: condition_example
+  tasks:
+  - name: install apache depending on the OS 
+    command: yum install httpd -y
+    when: ansible_os_family == "RedHat"
+  - command: apt-get install apache2 -y
+    when: ansible_os_family == "Debian" 

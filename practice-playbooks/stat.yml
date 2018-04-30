@@ -1,0 +1,12 @@
+--- # ANsible stat example
+- hosts: aws
+  remote_user: test
+  become: yes
+  connection: ssh
+  gather_facts: yes
+  tasks:
+  - name: check file or directory
+    stat: path=/home/test/cron
+    register: reply
+  - debug: msg="This is a directory and exists"
+    when: reply.stat.isdir is defined and reply.stat.isdir

@@ -1,0 +1,9 @@
+--- # Ansible fetch example playbook
+- hosts: aws
+  remote_user: test
+  gather_facts: yes
+  connection: ssh
+  become: yes
+  tasks:
+  - name: copy remote hosts file to the server
+    fetch: src=/home/test/cron.log dest=/etc/ansible/playbooks
