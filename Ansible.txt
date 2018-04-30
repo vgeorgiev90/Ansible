@@ -1,0 +1,223 @@
+Ansible is IT automation, configuration and managment tool
+Uses playbooks to deploy,manage,build,test and configure
+
+
+YAML
+identation is done by space (by default 2 spaces)
+all yaml files start with ---
+---# YAML file
+-  Key: value
+-  Key2: value
+-  Key3: value
+
+Datatypes in YAML
+
+a: 123           # integer
+b: "123"         # string
+c: 123.0         # float
+d: !!float 123   # float
+e: !!str 123     # string
+f: !!int 123     # integer
+
+
+/etc/ansible/hosts - file used to define groups and nodes that belong to them
+/etc/ansible/ansible.cfg
+inventory - file containing hosts
+hosts file can be created (overwirted) in the home directory for the user running ansible
+ansible command must be ran with flag -i
+
+ansible server -i local/hosts/file -m ping
+
+If you want Ansible to run asynchronously (run job in parallel)
+add it bellow the task that you want
+async: seconds      # max time wait for job finish in seconds
+poll: seconds       # how often to check if job is finished in ms
+
+Lookup - ansible function to fetch external information, this plugin looks localy
+
+- debug: msg="{{ lookup('env', 'HOME') }}"
+
+
+Run task only one time , add the keyword after the task you want
+run_once: true
+
+To override ansible.cfg create such file in the home directory of the user running ansible
+there are 4 places that ansible will look
+1 - ANSIBLE_CONFIG env variable
+2 - home directory for the user running ansible with the name .ansible.cfg
+3 - local directory from which ansible is ran
+4 - /etc/ansible/ansible.cfg
+
+To add a host to ansible
+1 - on the ansible server create user (ansible)
+2 - generate ssh key pair for this user
+3 - copy the public key to the remote server that needs to be managed
+4 - create group in /etc/ansible/hosts and add the remote server to this group
+[test-group]
+private-server-dns.ip
+
+Ansible handlers - triggers for events
+notification must match the handler name
+tasks:
+  - action: yum name=http state=installed
+    notify: restart
+handlers:
+  - name: restart
+    action: service name=httpd state=restarted
+	
+ansible vault - let you to encrypt yaml files
+you can use it like follows
+ansible-vault create file.yml
+#to edit
+ansible-vault edit file.yml
+#change pass-key
+ansible-vault rekey file.yml
+# decrypt
+ansible-vault decrypt file.yml
+# to encrypt already created file
+ansible-vault encrypt file.yml
+
+Tags - you can place then for every task you want, to verify (search the tags)
+ansible-playbook play.yml --tags "your tag"
+# to skip tags
+ansible-playbook play.yml --skip-tags "your tag"
+	
+Commands:
+ansible group-name -m module -a arguments
+#ansible all -m ping
+#ansible all -m shell -a 'echo "test"'
+#ansible-playbook file.yml
+
+ansible-doc -l
+# to list all ansible modules
+ansible-doc module-name
+# more info about module
+# values with = are mandatory , values with - are optional
+
+IF you want to run part of the playbook you can use
+ansible-playbook book.yml --start-at-task='Task Name'
+
+For interactively asking playbook (choose which tasks will be executed)
+ansible-playbook book.yml --step
+
+ansible-playbook book.yml --extra-vars "vars"
+# provide variables from cmd
+
+For any tasks in your playbook that you want to be done on the control server you can use
+# example # local_action: command ping -c 2 localhost
+
+Most used modules
+
+setup  -  gather facts for the system , 
+--tree /path/name   create file containing all the facts
+-a to provide arguments to filter output ### ansible all -m setup -a 'filter=*ipv4*'
+
+file - basic file/directory module 
+# -a 'path=/etc/fstab'  - general information about a file
+# -a 'path=/tmp/test state=directory mode=0700 owner=test'
+
+copy - module to copy files
+# -a 'src=/path/to/file dst=/new/path/to/file owner=test mode=0600'
+# backup=yes   # for keeping backup of the file
+
+pause - interactive pause of the playbook
+# -name: Pause
+#  pause:
+#    prompt: "Some message"
+	 
+waitfor - waiting for dependancy to be available
+# - name: wait for apache port 80
+#   wait_for:
+#     port: 80
+#     state: started	 
+
+Yum - package installation module
+#- name: istall httpd
+#  yum: name=httpd state=latest
+# for yum update name=* state=latest
+
+Service - module for service control
+# - name: restart httpd
+#   service: name=httpd state=restarted
+# - name: enable httpd after reboot
+#   service: name=httpd enabled=yes
+#
+
+command - let you run arbitary commands via the shell (the same as shell module)
+
+cron - set and remove cron jobs as particullar user
+#cron:
+#  name: test cron job
+#  minute: "0"
+#  hour: "1"
+#  job: ls -la > cron.log
+#to remove the cron jobs
+#cron: name="test cron job" state=absent
+#Default time is *
+
+
+fetch - get file from remote location
+# fetch: src=/home/test/cron.log dest=/etc/ansible/playbooks
+#copy file from the remote server to the ansible controller
+
+user - add or remove users module
+#    user: name=ansible-test-user state=present group=root shell=/sbin/nologin
+
+
+AT - schedule commands or jobs
+# at: command="ls -l /var > /home/test/at.log" count=1 units="minutes"
+#to cancel the command
+# at: command="ls -l /var > /home/test/at.log" state=absent
+
+
+apache_module - general module for apache module interaction
+#
+#apache2_module: state=absent name=alias
+
+set-fact - module to set fact for remote system that can be persistent across playbooks
+
+stat - Retrieve file or file system status
+
+script - lets you run local script on remote group
+#script: /path/to/script creates=/some/log/file
+
+unarchive - untar or unzip a file
+# unarchive: src=/path/to/gz dest=/where/to/restore
+
+getURL - download a file from a website (wget)
+#get_url: url=some.url dest=some/dest/for/file mode=0640 force_basic_auth=yes # for basic auth
+
+filesystem - format any new block devices
+# filesystem: fstype=ext3 dev=/dev/sdb1 opts="some options"
+
+acl - facl module for ansible
+# acl: name=/some/file entity=test etype=user permissions="rw" state=present
+
+mysql_db - create mysql database
+# mysql_db: name=test state=present login_user=root login_password=password
+# for this module to be used there is dependancy (MySQL-python)
+
+mysql_user - manage mysql users
+#mysql_user: name=user password=pass123 priv=*.*:ALL state=present
+
+kernel_backlist - enable or disable kernel modules
+#kernel_blacklist: name=module state=present   # to blacklist module
+
+find - module for searches (similar to find command in linux)
+#find: paths="/etc" patterns="*.conf" recurse=yes size="12k/12m/12g" age="300/30m/30w" regex=True
+
+Ansible Roles - automation of the include statements
+Role --- files, templates, tasks, handlers, vars, defaults, meta     ## directory structure of a role
+If you want to run the main playbook for the role from different directory
+modify ansible.cfd and include the path in roles_path
+
+In every directory there must be main.yml with the statements
+
+Conditional include of a role
+roles:
+- { role: redhat_servers, when: "ansible_os_family == 'RedHat'" }
+
+
+ansible-galaxy 
+# install and reuse existing roles from galaxy.ansible.com
+# roles are extraceted in the default location specified for roles in ansible.cfg
