@@ -1,5 +1,15 @@
 - name: update the system
   yum: name=* state=latest
   register: out
+  tags: update system
 - debug: msg={{ out }}
 - debug: msg={{ message }}
+- name: Install some packages
+  yum: name={{ item }} state=latest
+  with_items:
+  - telnet
+  - lynx
+  - elinks
+  tags: install list
+- name: Copy the template
+  template: src=template.yml dest=/home/test/template mode=0640 owner=test
