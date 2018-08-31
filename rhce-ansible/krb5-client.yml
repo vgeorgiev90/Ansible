@@ -1,0 +1,31 @@
+--- # krb clients setup
+- hosts: client
+  remote_user: viktor
+  become: yes
+  connection: ssh
+  gather_facts: yes
+  vars_files:
+    - vars/variables.yml
+  tasks:
+  - name: Install packages
+    yum: name=krb5-workstation state=latest
+  - yum: name=pam_krb5 state=latest
+  - name: Copy config file
+    template: src=files/krb5.conf dest=/etc/krb5.conf owner=root group=root mode=644
+  - name: Add principals
+    shell: kadmin -w {{ admin_pass }} -q "{{ item }}"
+    with_items:
+      - addprinc -randkey host/{{ ansible_nodename }}
+      - ktadd host/{{ ansible_nodename }}
+      - addprinc -randkey nfs/{{ ansible_nodename }}
+      - ktadd nfs/{{ ansible_nodename }}
+  - name: Install nfs package
+    yum: name=nfs-utils state=latest
+  - service: name=rpcbind state=started enabled=yes
+  - service: name=nfs-client.target state=started enabled=yes
+  - name: Mount nfs share
+    lineinfile:
+      path: /etc/fstab 
+      line: "{{ nfs_server}}:/export  /mnt   nfs4   _netdev,rw,sec=krb5     0 0"
+  - shell: mount -a
+

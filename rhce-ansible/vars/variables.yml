@@ -1,0 +1,13 @@
+---
+realm_caps: RHCE.EXAM
+realm: rhce.exam
+kdc_server: kdc.rhce.exam
+kdb_password: viktor123
+admin_pass: admin123
+user_principle: rusko
+nfs_server: nfs.rhce.exam
+servers_network: 172.16.16.0/22
+block_device: /dev/sdb
+iqn_name: iqn.2018-08.exam.rhce
+iscsi_user: redhat
+iscsi_pass: redhat

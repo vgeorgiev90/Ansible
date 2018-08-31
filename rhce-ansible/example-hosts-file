@@ -1,0 +1,16 @@
+### Example ansible hosts file for RHCE playbooks
+
+[kdc]
+172.16.16.148
+
+[storage]
+172.16.16.149
+
+[client]
+172.16.16.151
+
+[all]
+172.16.16.148
+172.16.16.149
+172.16.16.151
+

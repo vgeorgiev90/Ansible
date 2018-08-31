@@ -1,0 +1,26 @@
+--- # Firewalld port management
+- hosts: all
+  remote_user: viktor
+  become: yes
+  connection: ssh
+  gather_facts: yes
+  vars_files:
+    - vars/variables.yml
+  tasks:
+  - name: Kerberos firewall rules
+    command: firewall-cmd --permanent --add-rich-rule "rule family=ipv4 source address={{ servers_network }} port protocol=tcp port=88 accept"
+    when: ansible_fqdn == "{{ kdc_server }}"
+  - command: firewall-cmd --permanent --add-rich-rule "rule family=ipv4 source address={{ servers_network }} port protocol=udp port=88 accept"
+    when: ansible_fqdn == "{{ kdc_server }}"
+  - command: firewall-cmd --permanent --add-rich-rule "rule family=ipv4 source address={{ servers_network }} port protocol=tcp port=749 accept"
+    when: ansible_fqdn == "{{ kdc_server }}"
+
+
+  - name: NFS firewall rules
+    command: firewall-cmd --permanent --add-service nfs
+    when: ansible_fqdn == "{{ nfs_server }}"
+  - command: firewall-cmd --permanent --add-rich-rule "rule family=ipv4 source address={{ servers_network }} port protocol=tcp port=3260 accept"
+    when: ansible_fqdn == "{{ nfs_server }}"
+
+  - name: reload firewall rules
+    command: firewall-cmd --reload
