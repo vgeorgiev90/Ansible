@@ -1,0 +1,42 @@
+--- ### Sync the website and database to production servers
+- hosts: dst
+  remote_user: rundeck
+  become: yes
+  gather_facts: yes
+  connection: ssh
+  vars_files:
+    - /var/lib/rundeck/ansible/playbooks/vars/variables.yml
+  tasks:
+  - name: Install MySQL-python package if not present
+    yum: name=MySQL-python state=latest
+  - name: Ensure that the web dir is present
+    file:
+      path: /var/www
+      state: directory
+      owner: nginx
+      mode: 0755
+  - name: Copy the website and database to production servers
+    copy:
+      src: /tmp/{{ site_name }}.tar.gz
+      dest: /tmp/{{ site_name }}.tar.gz
+  - copy:
+      src: /tmp/{{ database_name }}.sql
+      dest: /tmp/{{ database_name }}.sql
+  - name: Delete the old website
+    shell: rm -rf /var/www/{{ site_name }}
+    ignore_errors: yes
+  - name: Extract the new website
+    unarchive:
+      src: /tmp/{{ site_name }}.tar.gz
+      dest: /var/www/
+  - name: Change user and permissions
+    shell: chown -R nginx:nginx /var/www/{{ site_name }}
+  - name: Restore the database
+    mysql_db:
+      name: '{{ database_name }}'
+      login_user: '{{ mysql_user }}' 
+      login_password: '{{ mysql_root_pass }}'
+      state: import
+      target: /tmp/{{ database_name }}.sql
+  - name: Clean up archives
+    shell: rm -rf /tmp/{{ site_name }}.tar.gz && rm -rf /tmp/{{ database_name }}.sql

@@ -1,0 +1,27 @@
+--- ### Sync website from Preview to Production -- It requires only SiteName as parameter to run
+- hosts: src
+  remote_user: rundeck
+  become: yes
+  gather_facts: yes
+  connection: ssh
+  vars_files:
+    - /var/lib/rundeck/ansible/playbooks/vars/variables.yml
+  tasks:
+  - name: Install MySQL-python package
+    yum: name=MySQL-python state=latest
+  - name: Prepare the archive of the website
+    archive: path=/var/www/{{ site_name }} dest=/tmp/{{ site_name }}.tar.gz
+  - name: Dump Database of the website
+    mysql_db: name={{ database_name }} login_user={{ mysql_user }} login_password={{ mysql_root_pass }} state=dump target=/tmp/{{ database_name }}.sql
+  - name: Copy the archive and database dump to the local machine
+    fetch: 
+      src: /tmp/{{ site_name }}.tar.gz
+      dest: /tmp/
+      flat: yes
+  - fetch:
+      src: /tmp/{{ database_name }}.sql
+      dest: /tmp/
+      flat: yes
+  - name: Clean archives
+    shell: rm -rf /tmp/{{ site_name }}.tar.gz && rm -rf /tmp/{{ database_name }}.sql
+

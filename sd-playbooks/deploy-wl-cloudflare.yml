@@ -1,0 +1,78 @@
+--- ### Add zone and records in cloudflare for the white label deployment
+- hosts: localhost
+  connection: local
+  remote_user: rundeck
+  vars_files:
+  - /var/lib/rundeck/ansible/playbooks/vars/variables.yml
+  tasks:
+  - name: Add domain to cloudflare
+    uri:
+      url: "https://api.cloudflare.com/client/v4/zones"
+      method: POST
+      body: '{"name":"{{ domain }}","account":{"id":"d86becde65f0ce9d46afea0a5e358987","name":"Tradologic Solutions"},"jump_start":false}'
+      body_format: json
+      headers:
+        X-Auth-Email: "{{ cf_mail }}"
+        X-Auth-Key: "{{ cf_key }}"
+        Content-Type: "application/json"
+    ignore_errors: yes
+
+  - name: Add Dns A records in cloudflare
+    cloudflare_dns:
+      zone: "{{ domain }}"
+      record: "{{ domain }}"
+      type: A
+      value: "{{ domain_ip }}"
+      proxied: yes
+      account_email: "{{ cf_mail }}"
+      account_api_token: "{{ cf_key }}"
+
+  - name: Add Dns A records for aff in cloudflare
+    cloudflare_dns:
+      zone: "{{ domain }}"
+      record: aff
+      type: A
+      value: "{{ domain_ip }}"
+      proxied: yes
+      account_email: "{{ cf_mail }}"
+      account_api_token: "{{ cf_key }}"
+
+  - name: Add Dns A records for uat in cloudflare
+    cloudflare_dns:
+      zone: "{{ domain }}"
+      record: uat
+      type: A
+      value: 82.118.243.207
+      proxied: yes
+      account_email: "{{ cf_mail }}"
+      account_api_token: "{{ cf_key }}"
+
+  - name: Add Dns A records for www2 in cloudflare
+    cloudflare_dns:
+      zone: "{{ domain }}"
+      record: www2
+      type: A
+      value: 82.118.243.207
+      proxied: yes
+      account_email: "{{ cf_mail }}"
+      account_api_token: "{{ cf_key }}"
+
+  - name: Add Dns CNAME records in cloudflare
+    cloudflare_dns:
+      zone: "{{ domain }}"
+      type: CNAME
+      name: www
+      value: "{{ domain }}"
+      state: present
+      account_email: "{{ cf_mail }}"
+      account_api_token: "{{ cf_key }}"
+
+  - name: Add Dns SPF records in cloudflare
+    cloudflare_dns:
+      zone: "{{ domain }}"
+      type: SPF
+      value: v=spf1 mx include:mx.tlqa.net include:sendgrid.net ~all
+      state: present
+      account_email: "{{ cf_mail }}"
+      account_api_token: "{{ cf_key }}"
+

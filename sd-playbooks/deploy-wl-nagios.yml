@@ -1,0 +1,12 @@
+--- ### Deploy white label website to be monitored in production nagios
+- hosts: nagios
+  remote_user: rundeck
+  become: yes
+  connection: ssh
+  tasks:
+  - name: Copy the template config file to nagios-prod
+    template: src=files/nagios.tmpl dest=/etc/nagios3/objects/site.{{ domain }}.cfg owner=root group=root mode=640
+  - name: Check the config file for errors
+    shell: nagios3 -v /etc/nagios3/nagios.cfg
+  - name: Reload nagios3 service
+    service: name=nagios3 state=reloaded

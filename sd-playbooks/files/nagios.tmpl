@@ -1,0 +1,59 @@
+## HAPROXY ################
+define service{
+        use                     haproxy-graph-service
+        host_name               LB-sites
+        service_description     {{ domain }} - frontend /sessions/
+        check_command           check_haproxy_graphs1! sessions {{ domain }} FRONTEND
+        }
+define service{
+        use                     haproxy-graph-service
+        host_name               LB-sites
+        service_description     {{ domain }} - frontend /traffic/
+        check_command           check_haproxy_graphs1! traffic {{ domain }} FRONTEND
+        }
+## NGINX ################
+define service {
+        use                     generic-service
+        host_name               ngx1-sites
+        service_description     www.{{ domain }}
+        check_command           check-web!10.50.80.31!http://www.{{ domain }}!follow
+        contact_groups          admins
+        }
+define service {
+        use                     generic-service
+        host_name               ngx2-sites
+        service_description     www.{{ domain }}
+        check_command           check-web!10.50.80.32!http://www.{{ domain }}!follow
+        contact_groups          admins
+        }
+#define service {
+#        use                     generic-service
+#        host_name               ngx3-sites
+#        service_description     www.{{ domain }}
+#        check_command           check-web!10.50.80.33!http://www.{{ domain }}!follow
+#        contact_groups          admins
+#        }
+#define service {
+#        use                     generic-service
+#        host_name               ngx4-sites
+#        service_description     www.{{ domain }}
+#        check_command           check-web!10.50.80.34!http://www.{{ domain }}!follow
+#        contact_groups          admins
+#        }
+## AFF ################
+#define service {
+#        use                     generic-service
+#        host_name               iis1-webs
+#        service_description     aff.{{ domain }}
+#        check_command           check-web!10.50.80.63!http://aff.{{ domain }}!follow
+#        contact_groups          admins
+#        }
+#define service {
+#        use                     generic-service
+#        host_name               iis2-webs
+#        service_description     aff.{{ domain }}
+#        check_command           check-web!10.50.80.64!http://aff.{{ domain }}!follow
+#        contact_groups          admins
+#        }
+## END ################
+

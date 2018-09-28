@@ -1,0 +1,18 @@
+--- ### Playbook to check for updates 
+- hosts: update-check
+  remote_user: rundeck
+  become: yes
+  gather_facts: yes
+  connection: ssh
+  tasks:
+  - name: Check for package updates on debian
+    shell: echo "$(hostname) --- $(date)" > /root/updates-available.txt && apt-get --no-act upgrade >> /root/updates-available.txt
+    when: ansible_os_family == "Debian"
+    ignore_errors: yes
+  - name: Check for package updates on redhat
+    shell: echo "$(hostname) --- $(date)" > /root/updates-available.txt && yum check-update >> /root/updates-available.txt
+    when: ansible_os_family == "RedHat"
+    ignore_errors: yes
+  - name: Send mail with the reports
+    shell: sendmail {{ address }} < /root/updates-available.txt
+  

@@ -1,0 +1,38 @@
+--- ### Deploy mysql and nginx white labels
+- hosts: wp-servers
+  remote_user: rundeck
+  become: yes
+  gather_facts: yes
+  connection: ssh
+  vars_files:
+  - /var/lib/rundeck/ansible/playbooks/vars/variables.yml
+  tasks:
+  - name: Create directory
+    file:
+      path: /var/www/{{ directory }}
+      state: directory
+      mode: 0755
+
+  - name: Generate nginx config
+    template: src=files/pp-wp-example.conf dest=/etc/nginx/conf.d/{{ domain }}.conf owner=nginx group=nginx mode=640
+    when: ansible_hostname == 'ngx1pp' or ansible_hostname == 'ngx*'
+  - template: src=files/dev-wp-example.conf dest=/etc/nginx/conf.d/{{ domain }}.conf owner=nginx group=nginx mode=640
+    when: ansible_hostname == 'wpdev'
+  - template: src=files/qa-wp-example.conf dest=/etc/nginx/conf.d/{{ domain }}.conf owner=nginx group=nginx mode=640
+    when: ansible_hostname == 'wpqa'
+  - template: src=files/stage-wp-example.conf dest=/etc/nginx/conf.d/{{ domain }}.conf owner=nginx group=nginx mode=640
+    when: ansible_hostname == 'wpstage'
+  - template: src=files/uat-wp-example.conf dest=/etc/nginx/conf.d/{{ domain }}.conf owner=nginx group=nginx mode=640
+    when: ansible_hostname == 'wpuat'
+  - template: src=files/w2-wp-example.conf dest=/etc/nginx/conf.d/{{ domain }}.conf owner=nginx group=nginx mode=640
+    when: ansible_hostname == 'wpw2'
+
+  - name: reload nginx service
+    service: name=nginx state=reloaded
+  - name: Create user and database
+    shell: /usr/bin/mysql -u root -p{{ mysql_root_pass }} -e "create database {{ db_name }};"
+    ignore_errors: yes
+  - shell: /usr/bin/mysql -u root -p{{ mysql_root_pass }} -e "GRANT ALL PRIVILEGES ON {{ db_name }}.* TO '{{ db_name }}'@'%'  IDENTIFIED BY '{{ db_pass }}';"
+    ignore_errors: yes
+  - shell: /usr/bin/mysql -u root -p{{ mysql_root_pass }} -e "flush privileges;"
+
