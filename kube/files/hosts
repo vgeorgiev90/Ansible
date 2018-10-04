@@ -1,0 +1,12 @@
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost6 localhost6.localdomain6
+
+
+10.0.11.150 kube-master1
+10.0.11.151 kube-master2
+10.0.11.152 kube-worker1
+10.0.11.153 kube-worker2
+10.0.11.154 kube-worker3
+10.0.11.155 kube-haproxy
+10.0.11.160 kube-etcd1
+10.0.11.161 kube-etcd2

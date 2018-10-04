@@ -1,0 +1,29 @@
+--- ## Hosts for kubernetes
+- hosts: ubuntu
+  remote_user: viktor
+  become: yes
+  connection: ssh
+  gather_facts: yes
+  tasks:
+  - name: Copy hosts file to nodes
+    copy: src=files/hosts dest=/etc/hosts owner=root group=root mode=0644
+  - name: Copy k8s.conf to /etc/sysctl.d
+    copy: src=files/k8s.conf dest=/etc/sysctl.d/k8s.conf owner=root group=root mode=0644
+  - name: install docker deps
+    shell: apt-get update && apt-get upgrade -y
+  - name: install docker
+    shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+  - shell: add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" && apt-get update
+  - apt: name=docker-ce state=latest
+  - service: name=docker state=restarted enabled=yes
+  - name: kubernetes packages
+    shell: curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+  - shell: cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+deb http://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+  - name: kubernetes install
+    shell: apt-get update && apt-get install kubelet kubeadm kubectl -y
+  - service: name=kubelet state=restarted enabled=yes
+  - name: Add gluster repo
+    shell: add-apt-repository ppa:gluster/glusterfs-3.13 -y && apt-get update
+  - shell: apt-get install glusterfs-client -y
