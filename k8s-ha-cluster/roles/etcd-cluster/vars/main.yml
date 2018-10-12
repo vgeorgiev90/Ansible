@@ -1,0 +1,11 @@
+---
+## Etcd members ipv4 addresses
+etcd0: 10.0.11.100
+etcd1: 2.2.2.2
+etcd2: 3.3.3.3
+
+
+## Etcd members hostnames
+etcd0_host: ubuntu
+etcd1_host: dummy2
+etcd2_host: dummy3

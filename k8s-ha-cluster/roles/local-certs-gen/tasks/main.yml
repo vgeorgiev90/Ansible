@@ -1,0 +1,27 @@
+- name: Create dirs for config and certs holds
+  shell: mkdir /tmp/{{ item }}
+  with_items:
+  - "{{ etcd0 }}"
+  - "{{ etcd1 }}"
+  - "{{ etcd2 }}"
+
+- name: Create configuration files for kubeadm etcd
+  template: src=../templates/kubeadmcfg.yaml dest=/tmp/{{ item }} 
+  with_items:
+  - "{{ etcd0 }}"
+  - "{{ etcd1 }}"
+  - "{{ etcd2 }}"
+
+- name: Create kube ssl directories
+  shell: mkdir -pv /etc/kubernetes/pki/etcd
+
+- name: Generate CA
+  shell: kubeadm alpha phase certs etcd-ca
+
+- name: Create certificates for each member
+  shell: kubeadm alpha phase certs etcd-server --config=/tmp/{{ item }}/kubeadmcfg.yaml && kubeadm alpha phase certs etcd-peer --config=/tmp/{{ item }}/kubeadmcfg.yaml && kubeadm alpha phase certs etcd-healthcheck-client --config=/tmp/{{ item }}/kubeadmcfg.yaml && kubeadm alpha phase certs apiserver-etcd-client --config=/tmp/{{ item }}/kubeadmcfg.yaml && cp -R /etc/kubernetes/pki /tmp/{{ item }}/ && chown -R ansible:ansible /tmp/{{ item }}
+  with_items:
+  - "{{ etcd0 }}"
+  - "{{ etcd1 }}"
+  - "{{ etcd2 }}"
+

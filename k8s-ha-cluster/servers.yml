@@ -1,0 +1,28 @@
+### Install all needed requesites
+- hosts: all
+  become: yes
+  remote_user: ansible
+  gather_facts: true
+  connection: ssh
+  roles:
+    - prereqs
+
+### Generate etcd certificates
+- hosts: local
+  become: yes
+  remote_user: ansible
+  gather_facts: false
+  connection: local
+  roles:
+    - local-certs-gen
+
+### Bootstrap the etcd cluster
+- hosts: etcd
+  become: yes
+  remote_user: ansible
+  gather_facts: true
+  connection: ssh
+  roles:
+    - etcd-cluster
+
+
