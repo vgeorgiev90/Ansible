@@ -36,7 +36,8 @@
   - { ip: "{{ etcd1 }}", name: "{{ etcd1_host }}" }
   - { ip: "{{ etcd2 }}", name: "{{ etcd2_host }}" }
 
-- shell: | 
+- name: Clean up
+  shell: | 
     rm /etc/kubernetes/pki -rf
     mv /tmp/{{ etcd0_host }}/pki /etc/kubernetes/pki
     mv /tmp/{{ etcd0_host }}/kubeadmcfg.yaml /etc/kubernetes/kubeadmcfg.yaml
