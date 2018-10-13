@@ -5,8 +5,10 @@
   shell: systemctl daemon-reload
 
 - name: Copy config files to /etc/kubernetes
-  shell: mv /home/ansible/pki /etc/kubernetes/pki
-- shell: mv /home/ansible/kubeadmcfg.yaml /etc/kubernetes/
+  shell: | 
+    mv /home/ansible/pki /etc/kubernetes/pki
+    mv /home/ansible/kubeadmcfg.yaml /etc/kubernetes/
+  when: ansible_hostname != "{{ etcd0_host }}"
 
 - name: Create static pod manifests
   shell: kubeadm alpha phase etcd local --config=/etc/kubernetes/kubeadmcfg.yaml

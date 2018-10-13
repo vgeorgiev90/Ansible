@@ -39,3 +39,6 @@
 - shell: | 
     rm /etc/kubernetes/pki -rf
     mv /tmp/{{ etcd0_host }}/pki /etc/kubernetes/pki
+    mv /tmp/{{ etcd0_host }}/kubeadmcfg.yaml /etc/kubernetes/kubeadmcfg.yaml
+    rm -rf /tmp/*
+
