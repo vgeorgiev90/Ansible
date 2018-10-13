@@ -1,16 +1,19 @@
+- name: Copy key
+  copy: src=/home/ansible/.ssh/id_rsa dest=/home/ansible/.ssh/id_rsa owner=ansible group=ansible mode=0600
+
 - name: Create dirs for config and certs holds
   shell: mkdir /tmp/{{ item }}
   with_items:
-  - "{{ etcd0 }}"
-  - "{{ etcd1 }}"
-  - "{{ etcd2 }}"
+  - "{{ etcd0_host }}"
+  - "{{ etcd1_host }}"
+  - "{{ etcd2_host }}"
 
 - name: Create configuration files for kubeadm etcd
-  template: src=../templates/kubeadmcfg.yaml dest=/tmp/{{ item }} 
+  template: src=../templates/kubeadmcfg.yaml dest=/tmp/{{ item.name }} 
   with_items:
-  - "{{ etcd0 }}"
-  - "{{ etcd1 }}"
-  - "{{ etcd2 }}"
+  - { ip: "{{ etcd0 }}", name: "{{ etcd0_host }}" }
+  - { ip: "{{ etcd1 }}", name: "{{ etcd1_host }}" }
+  - { ip: "{{ etcd2 }}", name: "{{ etcd2_host }}" }
 
 - name: Create kube ssl directories
   shell: mkdir -pv /etc/kubernetes/pki/etcd
@@ -19,9 +22,20 @@
   shell: kubeadm alpha phase certs etcd-ca
 
 - name: Create certificates for each member
-  shell: kubeadm alpha phase certs etcd-server --config=/tmp/{{ item }}/kubeadmcfg.yaml && kubeadm alpha phase certs etcd-peer --config=/tmp/{{ item }}/kubeadmcfg.yaml && kubeadm alpha phase certs etcd-healthcheck-client --config=/tmp/{{ item }}/kubeadmcfg.yaml && kubeadm alpha phase certs apiserver-etcd-client --config=/tmp/{{ item }}/kubeadmcfg.yaml && cp -R /etc/kubernetes/pki /tmp/{{ item }}/ && chown -R ansible:ansible /tmp/{{ item }}
+  shell: |
+    kubeadm alpha phase certs etcd-server --config=/tmp/{{ item.name }}/kubeadmcfg.yaml 
+    kubeadm alpha phase certs etcd-peer --config=/tmp/{{ item.name }}/kubeadmcfg.yaml 
+    kubeadm alpha phase certs etcd-healthcheck-client --config=/tmp/{{ item.name }}/kubeadmcfg.yaml
+    kubeadm alpha phase certs apiserver-etcd-client --config=/tmp/{{ item.name }}/kubeadmcfg.yaml 
+    cp -R /etc/kubernetes/pki /tmp/{{ item.name }}/
+    find /etc/kubernetes/pki -not -name ca.crt -not -name ca.key -type f -delete 
+    chown -R ansible:ansible /tmp/{{ item.name }}
+    rsync -r /tmp/{{ item.name }}/ ansible@{{ item.ip }}:/home/ansible
   with_items:
-  - "{{ etcd0 }}"
-  - "{{ etcd1 }}"
-  - "{{ etcd2 }}"
+  - { ip: "{{ etcd0 }}", name: "{{ etcd0_host }}" }
+  - { ip: "{{ etcd1 }}", name: "{{ etcd1_host }}" }
+  - { ip: "{{ etcd2 }}", name: "{{ etcd2_host }}" }
 
+- shell: | 
+    rm /etc/kubernetes/pki -rf
+    mv /tmp/{{ etcd0_host }}/pki /etc/kubernetes/pki

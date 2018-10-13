@@ -1,11 +1,11 @@
 ---
 ## Etcd members ipv4 addresses
-etcd0: 10.0.11.100
-etcd1: 2.2.2.2
-etcd2: 3.3.3.3
+etcd0: 10.0.11.170
+etcd1: 10.0.11.171
+etcd2: 10.0.11.172
 
 
 ## Etcd members hostnames
-etcd0_host: ubuntu
-etcd1_host: dummy2
-etcd2_host: dummy3
+etcd0_host: etcd1-ansible
+etcd1_host: etcd2-ansible
+etcd2_host: etcd3-ansible

@@ -20,3 +20,4 @@
 - name: Add gluster repo
   shell: add-apt-repository ppa:gluster/glusterfs-3.13 -y && apt-get update
 - shell: apt-get install glusterfs-client -y
+
