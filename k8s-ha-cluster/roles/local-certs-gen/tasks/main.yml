@@ -30,7 +30,7 @@
     cp -R /etc/kubernetes/pki /tmp/{{ item.name }}/
     find /etc/kubernetes/pki -not -name ca.crt -not -name ca.key -type f -delete 
     chown -R ansible:ansible /tmp/{{ item.name }}
-    rsync -r /tmp/{{ item.name }}/ ansible@{{ item.ip }}:/home/ansible
+    rsync -r -e "ssh -o StrictHostKeyChecking=no" /tmp/{{ item.name }}/ ansible@{{ item.ip }}:/home/ansible
   with_items:
   - { ip: "{{ etcd0 }}", name: "{{ etcd0_host }}" }
   - { ip: "{{ etcd1 }}", name: "{{ etcd1_host }}" }
@@ -44,13 +44,8 @@
     rm -rf /tmp/*
 
 - name: Fetch etcd certificates for later use in kube mater
-  fetch:
-    src: /etc/kubernetes/pki/etcd/ca.crt
-    dest: /tmp/ca.crt
-- fetch:
-    src: /etc/kubernetes/pki/apiserver-etcd-client.crt
-    dest: /tmp/apiserver-etcd-client.crt
-- fetch:
-    src: /etc/kubernetes/pki/apiserver-etcd-client.key
-    dest: /tmp/apiserver-etcd-client.key
- 
+  shell: | 
+    rsync -e "ssh -o StrictHostKeyChecking=no" /etc/kubernetes/pki/etcd/ca.crt ansible@10.0.11.100:/tmp/ca.crt
+    rsync -e "ssh -o StrictHostKeyChecking=no" /etc/kubernetes/pki/apiserver-etcd-client.crt ansible@10.0.11.100:/tmp/apiserver-etcd-client.crt
+    rsync -e "ssh -o StrictHostKeyChecking=no" /etc/kubernetes/pki/apiserver-etcd-client.key ansible@10.0.11.100:/tmp/apiserver-etcd-client.key
+    ### Hardcoded IPs must change to vars

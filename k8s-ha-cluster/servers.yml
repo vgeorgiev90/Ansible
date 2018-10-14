@@ -1,29 +1,29 @@
 ### Install all needed requesites
-- hosts: all
-  become: yes
-  remote_user: ansible
-  gather_facts: true
-  connection: ssh
-  roles:
-    - prereqs
+#- hosts: all
+#  become: yes
+#  remote_user: ansible
+#  gather_facts: true
+#  connection: ssh
+#  roles:
+#    - prereqs
 
 ### Generate etcd certificates
-- hosts: etcd-init
-  become: yes
-  remote_user: ansible
-  gather_facts: false
-  connection: ssh
-  roles:
-    - local-certs-gen
+#- hosts: etcd-init
+#  become: yes
+#  remote_user: ansible
+#  gather_facts: false
+#  connection: ssh
+#  roles:
+#    - local-certs-gen
 
 ### Bootstrap the etcd cluster
-- hosts: etcd
-  become: yes
-  remote_user: ansible
-  gather_facts: true
-  connection: ssh
-  roles:
-    - etcd-cluster
+#- hosts: etcd
+#  become: yes
+#  remote_user: ansible
+#  gather_facts: true
+#  connection: ssh
+#  roles:
+#    - etcd-cluster
      
 ### Setup haproxy load balancer for masters
 - hosts: lb-proxy 
@@ -41,7 +41,7 @@
   gather_facts: false
   connection: ssh
   roles:
-    - master_bootstrap
+    - master-bootstrap
 
 ### Add other masters
 - hosts: masters
@@ -50,4 +50,4 @@
   gather_facts: false
   connection: ssh
   roles:
-    - add_masters
+    - add-masters

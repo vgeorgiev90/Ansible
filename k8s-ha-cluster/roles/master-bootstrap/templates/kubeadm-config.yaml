@@ -1,18 +1,17 @@
 apiVersion: kubeadm.k8s.io/v1alpha3
-    kind: ClusterConfiguration
-    kubernetesVersion: stable
-    apiServerCertSANs:
-    - "{{ lb_name }}"
-    controlPlaneEndpoint: "{{ lb_ip }}:6443"
-    etcd:
-        external:
-            endpoints:
-            - https://{{ etcd0 }}:2379
-            - https://{{ etcd1 }}:2379
-            - https://{{ etcd2 }}:2379
-            caFile: /etc/kubernetes/pki/etcd/ca.crt
-            certFile: /etc/kubernetes/pki/apiserver-etcd-client.crt
-            keyFile: /etc/kubernetes/pki/apiserver-etcd-client.key
-    networking:
-        # This CIDR is a calico default. Substitute or remove for your CNI provider.
-        podSubnet: "{{ pod_cidr }}"
+kind: ClusterConfiguration
+kubernetesVersion: stable
+apiServerCertSANs:
+- "{{ lb_name }}"
+controlPlaneEndpoint: "{{ lb_ip }}:6443"
+etcd:
+  external:
+    endpoints:
+    - https://{{ etcd0 }}:2379
+    - https://{{ etcd1 }}:2379
+    - https://{{ etcd2 }}:2379
+    caFile: /etc/kubernetes/pki/etcd/ca.crt
+    certFile: /etc/kubernetes/pki/apiserver-etcd-client.crt
+    keyFile: /etc/kubernetes/pki/apiserver-etcd-client.key
+networking:
+  podSubnet: "{{ pod_cidr }}"
