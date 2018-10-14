@@ -1,0 +1,17 @@
+- name: Get all needed certificates from the local machine
+  copy: src=/tmp/kube-certs.tgz dest=/root/kube-certs.tgz
+
+- name: Extract archive
+  unarchive:
+    src: /root/kube-certs.tgz
+    dest: /etc/kubernetes
+    remote_src: yes
+
+- name: Copy kubeadm config
+  template: src=../templates/kubeadm-config.yaml dest=/etc/kubernetes/kubeadm-config.yaml
+
+- name: Join the master
+  shell: kubeadm init --config kubeadm-config.yaml
+
+- name: Clean up
+  shell: rm /root/kube-certs.tgz -rf

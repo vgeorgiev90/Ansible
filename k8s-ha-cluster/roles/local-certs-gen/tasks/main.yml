@@ -43,3 +43,14 @@
     mv /tmp/{{ etcd0_host }}/kubeadmcfg.yaml /etc/kubernetes/kubeadmcfg.yaml
     rm -rf /tmp/*
 
+- name: Fetch etcd certificates for later use in kube mater
+  fetch:
+    src: /etc/kubernetes/pki/etcd/ca.crt
+    dest: /tmp/ca.crt
+- fetch:
+    src: /etc/kubernetes/pki/apiserver-etcd-client.crt
+    dest: /tmp/apiserver-etcd-client.crt
+- fetch:
+    src: /etc/kubernetes/pki/apiserver-etcd-client.key
+    dest: /tmp/apiserver-etcd-client.key
+ 

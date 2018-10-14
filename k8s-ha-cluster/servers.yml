@@ -25,4 +25,29 @@
   roles:
     - etcd-cluster
      
+### Setup haproxy load balancer for masters
+- hosts: lb-proxy 
+  become: yes
+  remote_user: ansible
+  gather_facts: false
+  connection: ssh
+  roles:
+    - ha-proxy
 
+### Bootstrap the kube master
+- hosts: master-init
+  become: yes
+  remote_user: ansible
+  gather_facts: false
+  connection: ssh
+  roles:
+    - master_bootstrap
+
+### Add other masters
+- hosts: masters
+  become: yes
+  remote_user: ansible
+  gather_facts: false
+  connection: ssh
+  roles:
+    - add_masters

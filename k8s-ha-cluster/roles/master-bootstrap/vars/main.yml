@@ -1,0 +1,8 @@
+---
+
+lb_name:
+lb_ip:
+pod_cidr:
+etcd0:
+etcd1:
+etcd2:

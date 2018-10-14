@@ -1,0 +1,20 @@
+- name: Create kube directories
+  shell: mkdir -pv /etc/kubernetes/pki/etcd
+
+- name: Copy etcd certificates to the master nodes
+  copy: src=/tmp/ca.crt dest=/etc/kubernetes/pki/etcd/ca.crt owner=root group=root mode=0644
+- copy: src=/tmp/apiserver-etcd-client.crt dest=/etc/kubernetes/pki/apiserver-etcd-client.crt owner=root group=root mode 0644
+- copy: src=/tmp/apiserver-etcd-client.key dest=/etc/kubernetes/pki/apiserver-etcd-client.key owner=root group=root mode 0644
+
+- name: Copy the kube config template
+  template: src=../templates/kubeadm-config.yaml dest=/etc/kubernetes/kubeadm-config.yaml
+
+- name: Bootstrap the first master node
+  shell: kubeadm init --config /etc/kubernetes/kubeadm-config.yaml
+
+- name: Fetch kubernetes certificates for other mater nodes
+  archive:
+    path: /etc/kubernetes/pki
+    dest: /tmp/kube-certs.tgz
+- fetch: src=/tmp/kube-certs.tgz dest=/tmp/kube-certs.tgz
+

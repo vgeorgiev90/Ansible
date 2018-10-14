@@ -1,0 +1,9 @@
+- name: Install ha proxy load balancer
+  apt: name=haproxy state=latest
+
+- name: Copy haproxy config file
+  template: src=../templates/haproxy.cfg dest=/etc/haproxy/haproxy.cfg
+
+- name: Start and enable the service
+  service: name=haproxy state=restarted enabled=yes
+
