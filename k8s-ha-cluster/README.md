@@ -23,7 +23,10 @@ Dependencies:
 As the system is ubuntu ansible will be needed , as well as python-minimal package (python2.7)
 All roles are running as user ansible for better security , so such user must be created on the deploy host and 
 ssh key pair generated and distributed accross all machines.
-Note: Upgrade your system and disable apparmor,ufw services before start (apt-get upgrade -y;systemctl disable apparmor;systemctl stop apparmor;ufw disable)
+
+Note: 
+* Upgrade your system and disable apparmor,ufw services before start 
+* (apt-get upgrade -y;systemctl disable apparmor;systemctl stop apparmor;ufw disable)
 
 To be added later:
 * glusterfs backed storage class for dynamic persistent volumes provisioning
