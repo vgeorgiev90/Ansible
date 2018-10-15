@@ -27,6 +27,16 @@ ssh key pair generated and distributed accross all machines.
 Note: 
 * Upgrade your system and disable apparmor,ufw services before start 
 * (apt-get upgrade -y;systemctl disable apparmor;systemctl stop apparmor;ufw disable)
+* For more than 2 masters add additional backend server definition in haproxy template as well as such variable in hosts file
+  example haproxy.cfg template:
+  server kube-master2 {{ master3_ip }}:6443 fall 3 rise 2
+  hosts
+  [all:vars]
+  ....
+  master1_ip=...
+  master2_ip=...
+  master3_ip=<IP>
+  
 
 To be added later:
 * glusterfs backed storage class for dynamic persistent volumes provisioning
