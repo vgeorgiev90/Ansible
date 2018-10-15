@@ -1,6 +1,3 @@
-- name: Copy key
-  copy: src=/home/ansible/.ssh/id_rsa dest=/home/ansible/.ssh/id_rsa owner=ansible group=ansible mode=0600
-
 - name: Create dirs for config and certs holds
   shell: mkdir /tmp/{{ item }}
   with_items:
@@ -30,22 +27,42 @@
     cp -R /etc/kubernetes/pki /tmp/{{ item.name }}/
     find /etc/kubernetes/pki -not -name ca.crt -not -name ca.key -type f -delete 
     chown -R ansible:ansible /tmp/{{ item.name }}
-    rsync -r -e "ssh -o StrictHostKeyChecking=no" /tmp/{{ item.name }}/ ansible@{{ item.ip }}:/home/ansible
   with_items:
   - { ip: "{{ etcd0 }}", name: "{{ etcd0_host }}" }
   - { ip: "{{ etcd1 }}", name: "{{ etcd1_host }}" }
   - { ip: "{{ etcd2 }}", name: "{{ etcd2_host }}" }
 
-- name: Clean up
-  shell: | 
-    rm /etc/kubernetes/pki -rf
-    mv /tmp/{{ etcd0_host }}/pki /etc/kubernetes/pki
-    mv /tmp/{{ etcd0_host }}/kubeadmcfg.yaml /etc/kubernetes/kubeadmcfg.yaml
-    rm -rf /tmp/*
+- name: Archive files
+  archive:
+    path: /tmp/{{ item }}/
+    dest: /tmp/{{ item }}.tgz
+  with_items:
+  - "{{ etcd0_host }}"
+  - "{{ etcd1_host }}"
+  - "{{ etcd2_host }}"
 
-- name: Fetch etcd certificates for later use in kube mater
-  shell: | 
-    rsync -e "ssh -o StrictHostKeyChecking=no" /etc/kubernetes/pki/etcd/ca.crt ansible@10.0.11.100:/tmp/ca.crt
-    rsync -e "ssh -o StrictHostKeyChecking=no" /etc/kubernetes/pki/apiserver-etcd-client.crt ansible@10.0.11.100:/tmp/apiserver-etcd-client.crt
-    rsync -e "ssh -o StrictHostKeyChecking=no" /etc/kubernetes/pki/apiserver-etcd-client.key ansible@10.0.11.100:/tmp/apiserver-etcd-client.key
-    ### Hardcoded IPs must change to vars
+- name: Fetch certs for later use in kube bootstrap
+  fetch:
+    src: /tmp/{{ item }}.tgz
+    dest: /tmp/{{ item }}.tgz
+    flat: yes
+  with_items:
+  - "{{ etcd0_host }}"
+  - "{{ etcd1_host }}"
+  - "{{ etcd2_host }}"
+
+- fetch: 
+    src: /tmp/{{ etcd0_host }}/pki/apiserver-etcd-client.crt
+    dest: /tmp/apiserver-etcd-client.crt
+    flat: yes
+- fetch:
+    src: /tmp/{{ etcd0_host }}/pki/apiserver-etcd-client.key
+    dest: /tmp/apiserver-etcd-client.key
+    flat: yes
+- fetch:
+    src: /tmp/{{ etcd0_host }}/pki/etcd/ca.crt
+    dest: /tmp/ca.crt
+    flat: yes
+
+- name: Clean up
+  shell: rm /tmp/* -rf

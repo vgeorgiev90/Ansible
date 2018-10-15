@@ -16,5 +16,11 @@
   archive:
     path: /etc/kubernetes/pki
     dest: /tmp/kube-certs.tgz
-- fetch: src=/tmp/kube-certs.tgz dest=/tmp/kube-certs.tgz
+- fetch: 
+    src: /tmp/kube-certs.tgz 
+    dest: /tmp/kube-certs.tgz
+    flat: yes
+
+- name: Clean up tasks
+  shell: rm /tmp/kube-certs.tgz && mkdir /root/.kube && cp /etc/kubernetes/admin.conf /root/.kube/config
 

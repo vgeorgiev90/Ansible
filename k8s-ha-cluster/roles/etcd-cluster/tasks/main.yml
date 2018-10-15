@@ -1,14 +1,17 @@
 - name: Configure the kubelet to be a service manager for etcd
   copy: src=../templates/20-etcd-service-manager.conf dest=/etc/systemd/system/kubelet.service.d/20-etcd-service-manager.conf owner=root group=root mode=0644
-
 - name: Reload kubelet service difinition
   shell: systemctl daemon-reload
 
-- name: Copy config files to /etc/kubernetes
-  shell: | 
-    mv /home/ansible/pki /etc/kubernetes/pki
-    mv /home/ansible/kubeadmcfg.yaml /etc/kubernetes/
-  when: ansible_hostname != "{{ etcd0_host }}"
+- name: Synchronize all certificates to all etcd nodes
+  copy:
+    src: /tmp/{{ ansible_hostname }}.tgz
+    dest: /tmp/{{ ansible_hostname }}.tgz
+
+- name: Extract certificates
+  unarchive:
+    src: /tmp/{{ ansible_hostname }}.tgz
+    dest: /etc/kubernetes
 
 - name: Create static pod manifests
   shell: kubeadm alpha phase etcd local --config=/etc/kubernetes/kubeadmcfg.yaml

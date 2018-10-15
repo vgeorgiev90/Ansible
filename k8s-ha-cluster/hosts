@@ -1,22 +1,54 @@
+## All hosts 
 [all]
-10.0.11.100
-10.0.11.170
-10.0.11.171
-10.0.11.172
+10.0.11.150
+10.0.11.151
+10.0.11.152
+10.0.11.153
+10.0.11.160
+10.0.11.161
+10.0.11.162
+10.0.11.155
 
+## Global variables for all roles and hosts
+
+[all:vars]
+etcd0=10.0.11.160                ### IP address of 1st etcd node
+etcd1=10.0.11.161                ### IP address of 2nd etcd node
+etcd2=10.0.11.162                ### IP address of 3rd etcd node
+etcd0_host=etcd1                 ### Hostname of 1st etcd node
+etcd1_host=etcd2                 ### Hostname of 2nd etcd node
+etcd2_host=etcd3                 ### Hostname of 3rd etcd node
+lb_name=10.0.11.155              ### Name for the LB  , IP address can be used too
+lb_ip=10.0.11.155                ### IP address of the LB
+pod_cidr=10.244.0.0/16           ### Cidr range for the pods - for the moment weave CNI is hardcoded
+master1_ip=10.0.11.150           ### IP address of the 1st master node
+master2_ip=10.0.11.151           ### IP address of the 2nd master node
+master_ip=10.0.11.150            ### IP address of any of the master nodes ( used for HA proxy and workers add roles )
+
+## Host used to initialize etcd cluster and certificates
 [etcd-init]
-10.0.11.170
+10.0.11.160
 
+## Hosts in the etcd cluster for the moment cluster with 3 nodes is hardcoded
 [etcd]
-10.0.11.170
-10.0.11.171
-10.0.11.172
+10.0.11.160
+10.0.11.161
+10.0.11.162
 
+## Host used to initializa kubernetes cluster and certificates
 [master-init]
-10.0.11.170
+10.0.11.150
 
+## Other master hosts for the moment the cluster is set with 2 masters only
 [masters]
-10.0.11.171
+10.0.11.151
 
+## Proxy load balancer for multi master setup
 [lb-proxy]
-10.0.11.172
+10.0.11.155
+
+## Workers nodes addresses , workers can be as many as needed
+[workers]
+10.0.11.152
+10.0.11.153
+

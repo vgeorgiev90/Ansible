@@ -1,8 +1,0 @@
----
-etcd0: 10.0.11.170
-etcd1: 10.0.11.171
-etcd2: 10.0.11.172
-
-etcd0_host: etcd1-ansible
-etcd1_host: etcd2-ansible
-etcd2_host: etcd3-ansible

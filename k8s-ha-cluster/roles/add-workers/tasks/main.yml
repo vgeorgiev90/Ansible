@@ -1,0 +1,24 @@
+- name: Get the worker join token
+  shell: kubeadm token create --print-join-command > /root/join
+  delegate_to: "{{ master_ip }}"
+
+- name: Fetch join command
+  fetch:
+    src: /root/join
+    dest: /tmp/join
+    flat: yes
+  delegate_to: "{{ master_ip }}"
+
+- name: Copy join command to workers
+  synchronize:
+    src: /tmp/join
+    dest: /root/join
+
+- name: Join the worker to the cluster
+  shell: bash /root/join
+  register: out
+
+- debug: msg={{ out }}
+
+- name: Clean up
+  shell: rm /root/join -rf
