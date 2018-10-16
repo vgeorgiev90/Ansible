@@ -37,6 +37,22 @@ Note:
   master2_ip=...
   master3_ip=<IP>
   
+Variables that needs to be changed in hosts file:
+[all:vars]
+* etcd0=10.0.11.160                ### IP address of 1st etcd node
+* etcd1=10.0.11.161                ### IP address of 2nd etcd node
+* etcd2=10.0.11.162                ### IP address of 3rd etcd node
+* etcd0_host=etcd1                 ### Hostname of 1st etcd node
+* etcd1_host=etcd2                 ### Hostname of 2nd etcd node
+* etcd2_host=etcd3                 ### Hostname of 3rd etcd node
+* lb_name=10.0.11.155              ### Name for the LB  , IP address can be used too
+* lb_ip=10.0.11.155                ### IP address of the LB
+* pod_cidr=10.244.0.0/16           ### Cidr range for the pods - for the moment weave CNI is hardcoded
+* master1_ip=10.0.11.150           ### IP address of the 1st master node
+* master2_ip=10.0.11.151           ### IP address of the 2nd master node
+* master_ip=10.0.11.150            ### IP address of any of the master nodes ( used for HA proxy and workers add roles )
+
+
 
 To be added later:
 * glusterfs backed storage class for dynamic persistent volumes provisioning
