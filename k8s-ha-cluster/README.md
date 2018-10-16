@@ -61,7 +61,7 @@ Variables that needs to be changed in hosts file:
 
 
 To be added later:
-* glusterfs backed storage class for dynamic persistent volumes provisioning
+* glusterfs backed storage class for dynamic persistent volumes provisioning     ---     deploy to be tested
 * helm package manager for k8s along with tiller deployment for easy installations
 * prometheus, grafana for cluster monitoring
 * elk stack with fluentbit for container and cluster log aggregation
