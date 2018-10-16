@@ -1,0 +1,104 @@
+- name: Add gluster repo
+  shell: add-apt-repository ppa:gluster/glusterfs-3.13 -y && apt-get update
+- apt: name=glusterfs-server state=latest
+
+- name: Enable and start glusterd service
+  service: name=glusterd state=restarted enabled=yes
+
+- name: Add all servers to the pool
+  shell: gluster peer probe "{{ item }}"
+  with_items:
+  - "{{ gluster_host1 }}"
+  - "{{ gluster_host2 }}"
+  - "{{ gluster_host3 }}"
+  delegate_to: "{{ gluster_host1 }}"
+
+- name: Check cluster status
+  shell: gluster pool list
+  register: out
+  delegate_to: "{{ gluster_host1 }}"
+- debug: msg={{ out }}
+
+
+- name: Create heketi working directories
+  shell: | 
+    mkdir -pv /var/lib/heketi  
+    mkdir -pv /etc/heketi
+  delegate_to: "{{ gluster_host1 }}"
+
+- name: Add heketi user
+  user:
+    name: heketi
+    group: heketi
+    state: present
+    home: /var/lib/heketi
+    create_home: no
+    generate_ssh_key: yes
+    ssh_key_bits: 2048
+    ssh_key_file: /var/lib/heketi/.ssh/id_rsa
+  delegate_to: "{{ gluster_host1 }}"
+
+- name: Fix permissions
+  shell: | 
+    chown -R heketi:heketi /var/lib/heketi 
+    chmod 700 /var/lib/heketi/.ssh
+    chmod 400 /var/lib/heketi/.ssh/id_rsa
+  delegate_to: "{{ gluster_host1 }}"
+
+- name: Ensure root .ssh exists
+  file:
+    path: /root/.ssh
+    state: directory
+    mode: 0700
+    owner: root
+    group: root
+  delegate_to: "{{ gluster_host1 }}"
+
+- name: Add heketi public key for the root user
+  shell: KEY=`cat /var/lib/heketi/.ssh/id_rsa.pub` && echo $KEY >> /root/.ssh/authorized_keys && chmod 400 /root/.ssh/authorized_keys
+  delegate_to: "{{ gluster_host1 }}"
+
+- name: Copy config files
+  copy:
+    src: ../templates/heketi.json
+    dest: /etc/heketi/heketi.json
+    owner: heketi
+    group: heketi
+  delegate_to: "{{ gluster_host1 }}"
+
+- name: Create systemd service file
+  copy:
+    src: ../templates/heketi.service
+    dest: /lib/systemd/system/heketi.service
+  delegate_to: "{{ gluster_host1 }}"
+- shell: systemctl daemon-reload
+  delegate_to: "{{ gluster_host1 }}"
+
+#### Hardcoded version download must change
+- name: Get heketi binaries
+  shell: |
+    wget https://github.com/heketi/heketi/releases/download/1.0.1/heketi-1.0.1.linux.amd64.tar.gz -P /root 
+    tar -xzf /root/heketi-1.0.1.linux.amd64.tar.gz
+    mv /root/heketi/heketi /usr/bin/heketi
+    mv /root/heketi/heketi-cli /usr/bin/heketi-cli
+    rm /root/heketi* -rf
+  delegate_to: "{{ gluster_host1 }}"
+
+- name: Start and enable the service
+  service: name=heketi state=restarted enabled=yes
+  delegate_to: "{{ gluster_host1 }}"
+
+- name: Copy topology file
+  template:
+    src: ../templates/topology.json
+    dest: /etc/heketi/topology.json
+    owner: heketi
+    group: heketi
+  delegate_to: "{{ gluster_host1 }}"
+
+- name: Load the topology file
+  shell: heketi-cli topology load --json=/etc/heketi/topology.json
+  register: output
+  delegate_to: "{{ gluster_host1 }}"
+- debug: msg={{ output }}
+  delegate_to: "{{ gluster_host1 }}"

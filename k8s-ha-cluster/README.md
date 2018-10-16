@@ -51,6 +51,12 @@ Variables that needs to be changed in hosts file:
 * master1_ip=10.0.11.150           ### IP address of the 1st master node
 * master2_ip=10.0.11.151           ### IP address of the 2nd master node
 * master_ip=10.0.11.150            ### IP address of any of the master nodes ( used for HA proxy and workers add roles )
+* gluster_host1=10.0.11.165        ### IP of the 1st gluster host
+* gluster_host2=10.0.11.166        ### IP of the 2nd gluster host
+* gluster_host3=10.0.11.167        ### IP of the 3rd gluster host
+* gluster_host1_device=/dev/sdb    ### 
+* gluster_host1_device=/dev/sdb    ### Physical block device for every host that will be presented to glusterfs
+* gluster_host1_device=/dev/sdb    ### 
 
 
 

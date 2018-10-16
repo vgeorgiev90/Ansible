@@ -60,3 +60,12 @@
   connection: ssh
   roles:
     - add-workers
+
+### Glusterfs storage setup
+- hosts: gluster-storage
+  become: yes
+  remote_user: ansible
+  gather_facts: no
+  connection: ssh
+  roles:
+    - glusterfs-storage
