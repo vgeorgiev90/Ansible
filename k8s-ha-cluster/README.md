@@ -9,6 +9,7 @@ Infrastructure:
 2. Master nodes for the k8s cluster  - 2 nodes (hardcoded)
 3. HaProxy LB for the controll plane - 1 node
 4. Worker nodes                      - as many as needed
+5. Glusterfs nodes                   - 3 nodes (hardcoded)
 
 Roles:
 1. prereqs            -  Prerequsites for the cluster - docker pkgs, kubernetes etc.
@@ -18,6 +19,7 @@ Roles:
 5. master-bootstrap   -  Bootstraping of the first k8s master node (certificates generation)
 6. add-masters        -  Add the remaining masters to the controll plane and CNI install (weave hardcoded for now)
 7. add-workers        -  Add workers to the cluster 
+8. glusterfs-storage  -  Add glusterfs cluster and setup heketi for dynamic k8s storage provisioning
 
 Dependencies:
 As the system is ubuntu ansible will be needed , as well as python-minimal package (python2.7)
@@ -61,7 +63,6 @@ Variables that needs to be changed in hosts file:
 
 
 To be added later:
-* glusterfs backed storage class for dynamic persistent volumes provisioning     ---     deploy to be tested
 * helm package manager for k8s along with tiller deployment for easy installations
 * prometheus, grafana for cluster monitoring
 * elk stack with fluentbit for container and cluster log aggregation

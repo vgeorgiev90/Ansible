@@ -6,19 +6,19 @@
            "hostnames": { "manage": ["{{ gluster_host1 }}"], "storage": ["{{ gluster_host1 }}"], "zone": 1  },
            "zone": 1
           },
-         "devices": [{"name": "{{ gluster_host1_device}}"}]
+         "devices": ["{{ gluster_host1_device}}"]
        },
        { "node": {
            "hostnames": { "manage": ["{{ gluster_host2 }}"], "storage": ["{{ gluster_host2 }}"], "zone": 1  },
-           "zone": 2
+           "zone": 1
           },
-         "devices": [{"name": "{{ gluster_host2_device}}"}]
+         "devices": ["{{ gluster_host2_device}}"]
        },
        { "node": {
            "hostnames": { "manage": ["{{ gluster_host3 }}"], "storage": ["{{ gluster_host3 }}"], "zone": 1  },
-           "zone": 3
+           "zone": 1
           },
-         "devices": [{"name": "{{ gluster_host3_device}}"}]
+         "devices": ["{{ gluster_host3_device}}"]
        }
 
      ]

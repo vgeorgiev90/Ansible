@@ -8,6 +8,9 @@
 10.0.11.161
 10.0.11.162
 10.0.11.155
+10.0.11.165
+10.0.11.166
+10.0.11.167
 
 ## Global variables for all roles and hosts
 
@@ -27,9 +30,9 @@ master_ip=10.0.11.150
 gluster_host1=10.0.11.165
 gluster_host2=10.0.11.166
 gluster_host3=10.0.11.167
-gluster_host1_device=/dev/sdb
-gluster_host1_device=/dev/sdb
-gluster_host1_device=/dev/sdb
+gluster_host1_device=/dev/vdb1
+gluster_host2_device=/dev/vdb1
+gluster_host3_device=/dev/vdb1
 
 
 
@@ -63,3 +66,6 @@ gluster_host1_device=/dev/sdb
 
 ## Glusterfs nodes for k8s persistent storage
 [gluster-storage]
+10.0.11.165
+10.0.11.166
+10.0.11.167
