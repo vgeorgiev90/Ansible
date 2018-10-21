@@ -1,0 +1,11 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: <Your storage class name>
+  annotaions:
+    storageclass.kubernetes.io/is-default-class: true
+provisioner: kubernetes.io/glusterfs
+parameters:
+  resturl: "http://heketi:8080"                      ### heketi server api (service is created)
+  clusterid: "<Cluster id>"                          ### heketi cluster id
+  volumetype: "replicate:<Number>"                   ### Number of replicas you want

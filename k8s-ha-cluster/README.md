@@ -1,4 +1,4 @@
-### Kubernetes HA cluster setup on premise
+### Kubernetes HA cluster setup with kubeadm on premise
 ### Reference: 
 ### https://kubernetes.io/docs/setup/independent/high-availability/
 ### https://kubernetes.io/docs/setup/independent/setup-ha-etcd-with-kubeadm/
@@ -8,8 +8,7 @@ Infrastructure:
 1. External etcd cluster             - 3 nodes (hardcoded)
 2. Master nodes for the k8s cluster  - 2 nodes (hardcoded)
 3. HaProxy LB for the controll plane - 1 node
-4. Worker nodes                      - as many as needed
-5. Glusterfs nodes                   - 3 nodes (hardcoded)
+4. Worker nodes                      - as many as needed, will also run glusterfs cluster
 
 Roles:
 1. prereqs            -  Prerequsites for the cluster - docker pkgs, kubernetes etc.
@@ -19,14 +18,15 @@ Roles:
 5. master-bootstrap   -  Bootstraping of the first k8s master node (certificates generation)
 6. add-masters        -  Add the remaining masters to the controll plane and CNI install (weave hardcoded for now)
 7. add-workers        -  Add workers to the cluster 
-8. glusterfs-storage  -  Add glusterfs cluster and setup heketi for dynamic k8s storage provisioning
+8. glusterfs-storage  -  Create glusterfs cluster with all worker nodes (heketi will be deployed in the cluster)
+9. post-install-tasks -  Install helm on the master along with prometheus,grafana and heketi deployment to manage persistent storage
 
 Dependencies:
 As the system is ubuntu ansible will be needed , as well as python-minimal package (python2.7)
 All roles are running as user ansible for better security , so such user must be created on the deploy host and 
 ssh key pair generated and distributed accross all machines.
 
-Note: 
+Notes: 
 * Upgrade your system and disable apparmor,ufw services before start 
 * (apt-get upgrade -y;systemctl disable apparmor;systemctl stop apparmor;ufw disable)
 * For more than 2 masters add additional backend server definition in haproxy template as well as such variable in hosts file
@@ -53,17 +53,8 @@ Variables that needs to be changed in hosts file:
 * master1_ip=10.0.11.150           ### IP address of the 1st master node
 * master2_ip=10.0.11.151           ### IP address of the 2nd master node
 * master_ip=10.0.11.150            ### IP address of any of the master nodes ( used for HA proxy and workers add roles )
-* gluster_host1=10.0.11.165        ### IP of the 1st gluster host
-* gluster_host2=10.0.11.166        ### IP of the 2nd gluster host
-* gluster_host3=10.0.11.167        ### IP of the 3rd gluster host
-* gluster_host1_device=/dev/sdb    ### 
-* gluster_host1_device=/dev/sdb    ### Physical block device for every host that will be presented to glusterfs
-* gluster_host1_device=/dev/sdb    ### 
-
 
 
 To be added later:
-* helm package manager for k8s along with tiller deployment for easy installations
-* prometheus, grafana for cluster monitoring
 * elk stack with fluentbit for container and cluster log aggregation
 * deployment mechanism for applications running in k8s

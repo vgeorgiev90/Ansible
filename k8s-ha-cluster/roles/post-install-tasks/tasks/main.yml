@@ -1,0 +1,50 @@
+##### Helm and tiller instal ######
+- name: Install helm to the cluster
+  shell: |
+    wget https://storage.googleapis.com/kubernetes-helm/helm-v2.11.0-linux-amd64.tar.gz -P /root
+    tar -xzf /root/helm-v2.11.0-linux-amd64.tar.gz -C /root
+    cp /root/linux-amd64/helm /usr/bin
+    rm /root/helm* -rf
+    rm /root/linux-* -rf
+
+- name: Create service account for tiller
+  file: src=../templates/tiller-sa.yml dest=/root/post-install/tiller-sa.yml
+- shell: kubectl create -f /root/post-install/tiller-sa.yml
+
+- name: Install tiller to the cluster
+  shell: helm init --service-account=tiller
+
+- name: Wait for tiller to be ready
+  pause: minutes=1
+
+##### Install prometheus and grafana for cluster monitoring with helm ######
+
+- name: prometheus and grafana for cluster monitoring with helm
+  shell: |
+    helm repo add coreos https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/
+    helm install coreos/prometheus-operator --name prometheus-operator --namespace monitoring
+    helm install coreos/kube-prometheus --name kube-prometheus --set global.rbacEnable=true --namespace monitoring
+
+##### Heketi install for glusterfs volumes provisioning ######
+- name: Label master node for heketi
+  shell: kubectl label node "{{ ansible_hostname }}" heketi=yes
+
+- name: Create directory for post install tasks
+  file:
+    path: /root/post-install
+    state: directory
+    owner: root
+
+- template: src=../templates/storage-class-template.yml dest=/root/post-install/storage-class-template.yml
+
+- name: Create and run heketi container
+  template: src=../templates/heketi.yml dest=/root/post-install/heketi.yml
+
+- name: Run heketi
+  shell: kubectl create -f /root/post-install/heketi.yml
+  register: out
+- debug: msg={{ out }}
+
+###### Info ######
+- debug: msg="Prometheus and grafana are now installed , in order to use grafana create ingress for the service or use: kubectl port-forward $(kubectl get  pods --selector=app=kube-prometheus-grafana -n  monitoring --output=jsonpath="{.items..metadata.name}") -n monitoring  3000"
+- debug: msgs="Heketi is now installed as deployment to kube-system namespace to finish th installation: Copy the pub key(/var/lib/heketi/.ssh/id_rsa.pub) to all worker nodes, Modify the values in /etc/heketi/topology.json to reflect the correct workers and volumes , run heketi-cli topology load --json=/etc/heketi/topology.json, Create storage class (/root/post-install/storage-class-template.yml) can be used"

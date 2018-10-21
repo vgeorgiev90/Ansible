@@ -62,10 +62,19 @@
     - add-workers
 
 ### Glusterfs storage setup
-- hosts: gluster-storage
+- hosts: workers
   become: yes
   remote_user: ansible
-  gather_facts: no
+  gather_facts: true
   connection: ssh
   roles:
     - glusterfs-storage
+
+### Post install tasks
+- hosts: master-init
+  become: yes
+  remote_user: ansible
+  connection: ssh
+  gather_facts: true
+  roles:
+    - post-install-tasks
