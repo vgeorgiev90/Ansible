@@ -29,6 +29,14 @@
 - name: Label master node for heketi
   shell: kubectl label node "{{ ansible_hostname }}" heketi=yes
 
+- name: Create heketi directories
+  file:
+    path: /var/lib/heketi
+    state: directory
+- file:
+    path: /etc/heketi
+    state: directory
+    
 - name: Create directory for post install tasks
   file:
     path: /root/post-install
