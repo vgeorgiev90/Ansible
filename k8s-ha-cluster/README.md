@@ -53,6 +53,7 @@ Variables that needs to be changed in hosts file:
 * master1_ip=10.0.11.150           ### IP address of the 1st master node
 * master2_ip=10.0.11.151           ### IP address of the 2nd master node
 * master_ip=10.0.11.150            ### IP address of any of the master nodes ( used for HA proxy and workers add roles )
+* heketi_cluster_size=5            ### As many as your worker nodes
 
 
 To be added later:
