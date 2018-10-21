@@ -1,7 +1,8 @@
-- name: Add gluster repo
+- name: Add gluster repo and install server,client, thin-provisioning-tools
   shell: add-apt-repository ppa:gluster/glusterfs-3.13 -y && apt-get update
 - apt: name=glusterfs-server state=latest
 - apt: name=glusterfs-client state=latest
+- apt: name=thin-provisioning-tools state=latest
 
 - name: Enable and start glusterd service
   service: name=glusterd state=restarted enabled=yes
