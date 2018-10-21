@@ -15,16 +15,16 @@
 etcd0=10.0.11.160             
 etcd1=10.0.11.161                
 etcd2=10.0.11.162                
-etcd0_host=etcd1-ansible
-etcd1_host=etcd2-ansible
-etcd2_host=etcd3-ansible
+etcd0_host=etcd1
+etcd1_host=etcd2
+etcd2_host=etcd3
 lb_name=10.0.11.155
 lb_ip=10.0.11.155     
 pod_cidr=10.244.0.0/16      
 master1_ip=10.0.11.150     
 master2_ip=10.0.11.151      
 master_ip=10.0.11.150 
-heketi_cluster_size=5
+heketi_cluster_size=3
 
 ## Host used to initialize etcd cluster and certificates
 [etcd-init]

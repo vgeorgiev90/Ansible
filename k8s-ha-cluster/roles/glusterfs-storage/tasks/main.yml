@@ -1,6 +1,7 @@
 - name: Add gluster repo
   shell: add-apt-repository ppa:gluster/glusterfs-3.13 -y && apt-get update
 - apt: name=glusterfs-server state=latest
+- apt: name=glusterfs-client state=latest
 
 - name: Enable and start glusterd service
   service: name=glusterd state=restarted enabled=yes

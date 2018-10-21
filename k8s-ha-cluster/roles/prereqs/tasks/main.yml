@@ -8,6 +8,9 @@
 
 - name: Update package definitions
   shell: apt-get update 
+- name: Ntp
+  apt: name=ntp state=latest
+- service: name=ntp state=restarted enabled=yes
 
 - name: install docker
   shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -

@@ -19,20 +19,8 @@ spec:
         ports:
         - containerPort: 8080
         - containerPort: 8081
-        volumeMounts:
-        - mountPath: /etc/heketi
-          name: heketi-config
-        - mountPath: /var/lib/heketi
-          name: heketi-data
-      volumes:
-      - name: heketi-data
-        hostPath:
-          path: /var/lib/heketi
-      - name: heketi-config
-        hostPath:
-          path: /etc/heketi
       nodeSelector:
-        heketi: yes
+        app: heketi
       tolerations:
       - key: "node-role.kubernetes.io/master"
         operator: "Exists"
