@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: heketi-deploy
-        image: viktor90/heketi:v1
+        image: viktor90/heketi:latest
         env:
           - name: CLUSTER_SIZE
             value: "{{ heketi_cluster_size }}"
