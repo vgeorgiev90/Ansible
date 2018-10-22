@@ -38,8 +38,7 @@ Notes:
   master1_ip=...
   master2_ip=...
   master3_ip=<IP>
-* Heketi deployment to manage glusterfs nodes will run on the master in kube-system namespace two directories are created on the master
-  for persistent storage: /var/lib/heketi, /etc/heketi
+* Heketi deployment to manage glusterfs nodes will run on the master in kube-system namespace.
   
 Variables that needs to be changed in hosts file:
 [all:vars]
@@ -59,5 +58,6 @@ Variables that needs to be changed in hosts file:
 
 
 To be added later:
+* Persistent storage for heketi configurations
 * elk stack with fluentbit for container and cluster log aggregation
 * deployment mechanism for applications running in k8s
