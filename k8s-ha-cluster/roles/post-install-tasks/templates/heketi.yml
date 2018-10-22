@@ -19,6 +19,18 @@ spec:
         ports:
         - containerPort: 8080
         - containerPort: 8081
+        volumeMounts:
+        - name: heketi-config
+          mountPath: /etc/heketi
+        - name: heketi-data
+          mountPath: /var/lib/heketi
+      volumes:
+      - name: heketi-config
+        hostPath:
+          path: /etc/heketi
+      - name: heketi-data
+        hostPath:
+          path: /var/lib/heketi
       nodeSelector:
         app: heketi
       tolerations:
