@@ -19,7 +19,7 @@ Roles:
 6. add-masters        -  Add the remaining masters to the controll plane and CNI install (weave hardcoded for now)
 7. add-workers        -  Add workers to the cluster 
 8. glusterfs-storage  -  Create glusterfs cluster with all worker nodes (heketi will be deployed in the cluster)
-9. post-install-tasks -  Install helm on the master along with prometheus,grafana and heketi deployment to manage persistent storage
+9. post-install-tasks -  Install helm on the master along with prometheus,grafana, weave-scope and heketi deployment to manage persistent storage
 
 Dependencies:
 As the system is ubuntu ansible will be needed , as well as python-minimal package (python2.7)
