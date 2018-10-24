@@ -39,6 +39,12 @@
     kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml
     kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/baremetal/service-nodeport.yaml
 
+###### Weave-scope install ########
+## Ref: https://www.weave.works/oss/scope/
+
+- name: Install weave-scope
+  shell: kubectl apply -f "https://cloud.weave.works/k8s/scope.yaml?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+
 ##### Heketi install for glusterfs volumes provisioning ######
 - name: Label master node for heketi
   shell: kubectl label node "{{ ansible_hostname }}" app=heketi
@@ -76,3 +82,6 @@
 - debug: msg="Modify the topology file (/etc/heketi/topology.json) to reflect the correct workers and volumes , run heketi-cli topology load --json=/etc/heketi/topology.json"
 
 - debug: msg="Create storage class (/root/post-install/storage-class-template.yml) can be used"
+
+- debug: msg="Weave-scope is installed in namespace weave in order to access the UI create ingress rule, modify the service for nodeport or use kubectl port-forward/proxy"
+
