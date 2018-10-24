@@ -39,6 +39,7 @@ Notes:
   master2_ip=...
   master3_ip=<IP>
 * Heketi deployment to manage glusterfs nodes will run on the master in kube-system namespace.
+* For weave-scope UI either create ingress rule, expose the service as nodeport ,or use kubectl port-forward/proxy on port 4040
   
 Variables that needs to be changed in hosts file:
 [all:vars]
