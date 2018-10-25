@@ -59,5 +59,6 @@ Variables that needs to be changed in hosts file:
 
 
 To be added later:
+* keepalived on haproxy for controll plane HA
 * elk stack with fluentbit for container and cluster log aggregation
 * deployment mechanism for applications running in k8s
