@@ -1,9 +1,18 @@
 - name: Install ha proxy load balancer
   apt: name=haproxy state=latest
 
+- name: Install keepalived
+  apt: name=keepalived state=latest
+  
+- name: keepalived config file
+  template: src=../templates/keepalived.conf dest=/etc/keepalived/keepalived.conf 
+
 - name: Copy haproxy config file
   template: src=../templates/haproxy.cfg dest=/etc/haproxy/haproxy.cfg
 
 - name: Start and enable the service
   service: name=haproxy state=restarted enabled=yes
+  
+- name: Start and enable keepalived service
+  service: name=keepalived state=restarted enabled=yes
 
