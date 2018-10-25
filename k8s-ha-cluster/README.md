@@ -40,6 +40,7 @@ Notes:
   master3_ip=<IP>
 * Heketi deployment to manage glusterfs nodes will run on the master in kube-system namespace.
 * For weave-scope UI either create ingress rule, expose the service as nodeport ,or use kubectl port-forward/proxy on port 4040
+* Keepalived is installed along with haproxy for HA for vIP "lb_ip" is specified ,make sure that the actual IP of the haproxy node is    different (there will be HA if another node with haproxy and keepalived is added manually)
   
 Variables that needs to be changed in hosts file:
 [all:vars]
@@ -59,6 +60,5 @@ Variables that needs to be changed in hosts file:
 
 
 To be added later:
-* keepalived on haproxy for controll plane HA
 * elk stack with fluentbit for container and cluster log aggregation
 * deployment mechanism for applications running in k8s
