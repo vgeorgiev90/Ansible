@@ -1,0 +1,16 @@
+- name: Install firewalld
+  apt: name=firewalld state=latest
+
+- name: Start and enable service
+  service: name=firewalld state=restarted enabled=yes
+
+- name: Add firewalld rules for communication in the cluster
+  shell: |
+    firewall-cmd --permanent --add-rich-rule 'rule family=ipv4 source address={{ item }} accept'
+  with_items:
+  - "{{ groups['all'] }}"
+
+- name: Reload firewalld
+  shell: |
+    firewall-cmd --permanent --add-masquerade
+    firewall-cmd --reload
