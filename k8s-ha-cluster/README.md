@@ -27,7 +27,7 @@ All roles are running as user ansible for better security , so such user must be
 ssh key pair generated and distributed accross all machines.
 
 Notes: 
-* Upgrade your system and disable apparmor,ufw services before start 
+* Upgrade your system and disable apparmor,(ufw will be replaced with firewalld) 
 * (apt-get upgrade -y;systemctl disable apparmor;systemctl stop apparmor;ufw disable)
 * For more than 2 masters add additional backend server definition in haproxy template as well as such variable in hosts file
   example haproxy.cfg template:
