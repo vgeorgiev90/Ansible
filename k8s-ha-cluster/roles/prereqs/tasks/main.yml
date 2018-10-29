@@ -6,6 +6,9 @@
 - name: Copy k8s.conf to /etc/sysctl.d
   copy: src=../files/k8s.conf dest=/etc/sysctl.d/k8s.conf owner=root group=root mode=0644
 
+- name: Install firewalld and remove ufw
+  apt: name=ufw state=absent
+
 - name: Update package definitions
   shell: apt-get update 
 - name: Ntp
