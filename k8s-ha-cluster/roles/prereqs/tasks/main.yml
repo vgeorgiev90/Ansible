@@ -8,6 +8,7 @@
 
 - name: Install firewalld and remove ufw
   apt: name=ufw state=absent
+- include_tasks: firewalld.yml
 
 - name: Update package definitions
   shell: apt-get update 
