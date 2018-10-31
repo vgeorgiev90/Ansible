@@ -1,0 +1,5 @@
+- shell: exportfs -arv
+  register: out
+
+- debug: msg={{ out }}
+

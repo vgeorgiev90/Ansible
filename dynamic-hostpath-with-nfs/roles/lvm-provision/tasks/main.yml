@@ -1,0 +1,16 @@
+- include_tasks: remove.yml
+  when: state == 'absent'
+
+- name: Create the logical volume
+  lvol:
+    lv: "{{ lv_name }}"
+    vg: "{{ vg_name }}"
+    size: "{{ lv_size }}"
+    state: "{{ state }}"
+    force: yes
+  register: out
+
+- debug: msg={{ out }}
+
+- include_tasks: add.yml
+  when: state == 'present'

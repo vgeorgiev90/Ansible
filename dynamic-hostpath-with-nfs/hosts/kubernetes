@@ -1,0 +1,27 @@
+[nfs-server]
+10.0.11.170
+
+[workers]
+10.0.11.170
+
+[all:vars]
+######vg init
+vg_name=kube-vg
+devices=["/dev/vdb1"]
+
+######lvm provision
+lv_name=kube-lv
+vg_name=kube-vg
+lv_size=1g
+fs_type=ext4
+mount_name=/kubernetes/shared
+
+#nfs export
+worker_host=10.0.11.170
+nfs_server=10.0.11.170
+mount_name=/kubernetes/shared
+
+#worker mount
+mount_name=/kubernetes/shared
+work_dir=/shared
+nfs_server=10.0.11.170

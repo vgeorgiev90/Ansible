@@ -1,0 +1,7 @@
+---
+state: present
+lv_name: ansible-lv
+vg_name: ansible-vg
+lv_size: 1g
+fs_type: ext4
+mount_name: /kubernetes/ansible

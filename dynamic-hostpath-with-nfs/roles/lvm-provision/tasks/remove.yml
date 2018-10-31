@@ -1,0 +1,6 @@
+- name: umount eventual volume that will be removed
+  mount:
+    path: "{{ mount_name }}"
+    src: /dev/{{ vg_name }}/{{ lv_name }}
+    state: absent
+

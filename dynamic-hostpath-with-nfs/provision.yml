@@ -1,0 +1,8 @@
+---
+- hosts: nfs-server
+  remote_user: ansible
+  become: yes
+  connection: local
+  gather_facts: no
+  roles:
+    - lvm-provision

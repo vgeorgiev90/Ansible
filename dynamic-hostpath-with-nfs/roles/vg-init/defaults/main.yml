@@ -1,0 +1,6 @@
+---
+
+state: present
+vg_name: ansible-vg
+devices: ["/dev/vdb1"]
+

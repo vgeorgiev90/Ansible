@@ -1,0 +1,20 @@
+- name: Make sure the worker has nfs-common package
+  apt: name=nfs-common state=latest
+
+- name: Create working directory
+  file:
+    path: "{{ work_dir }}"
+    state: directory
+
+- name: Mount the exported dir
+  mount:
+    path: "{{ work_dir }}"
+    src: "{{ nfs_server }}:{{ mount_name }}"
+    fstype: nfs4
+    opts: _netdev,rw
+    state: "{{ state }}"
+
+- shell: mount -a
+  when: state == 'present'
+
+

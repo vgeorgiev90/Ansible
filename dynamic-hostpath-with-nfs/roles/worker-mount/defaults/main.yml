@@ -1,0 +1,6 @@
+---
+
+mount_name: /kubernetes/ansible
+work_dir: /working
+state: present
+nfs_server: 10.0.11.170

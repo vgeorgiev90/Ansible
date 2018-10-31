@@ -1,0 +1,3 @@
+- name: unexport the volume
+  shell: exportfs -u "{{ nfs_server }}":"{{ mount_name }}"
+

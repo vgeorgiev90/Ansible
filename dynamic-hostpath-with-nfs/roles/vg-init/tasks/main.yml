@@ -1,0 +1,10 @@
+- name: Creating volume group "{{ vg_name }}"
+  lvg:
+    state: "{{ state }}"
+    vg: "{{ vg_name }}"
+    pvs: "{{ devices }}"
+    force: yes
+  register: out
+
+- debug: msg={{ out }}
+

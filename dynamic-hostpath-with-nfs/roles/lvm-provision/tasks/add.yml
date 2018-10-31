@@ -1,0 +1,20 @@
+- name: Create file system for the volume
+  filesystem:
+    fstype: "{{ fs_type }}"
+    dev: /dev/{{vg_name}}/{{lv_name}}
+
+- name: Create mount point
+  file:
+    path: "{{ mount_name }}"
+    state: directory
+
+- name: Mount the volume to be exported
+  mount:
+    path: "{{ mount_name }}"
+    src: /dev/{{ vg_name }}/{{ lv_name }}
+    fstype: "{{ fs_type }}"
+    state: "{{ state }}"
+
+- shell: mount -a
+  when: state == 'present'
+
