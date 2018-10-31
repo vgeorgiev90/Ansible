@@ -10,12 +10,12 @@ Prereqs:
 
 Usage:
 * run.sh gen-vars    ---    To generate some variables for ansible this creates file in hosts/ dir for multiple provisions
-* run.sh vginit <File> present/absent  ---  Create the volume group base based on the vars file generated
-* run.sh volume <File> present/absent  ---  Create the logical volume,make file system, export with nfs and mount it on specified worker 
+* run.sh vginit File present/absent  ---  Create the volume group base based on the vars file generated
+* run.sh volume File present/absent  ---  Create the logical volume,make file system, export with nfs and mount it on specified worker 
   
 Notes:
-* For volume creation: 1) generate vars, 2) vginit <File> present, 3) volume <File> present
-* For volume deletion: 1) volume <File> absent, 2) vginit <File> absent  
+* For volume creation: 1) generate vars, 2) vginit File present, 3) volume File present
+* For volume deletion: 1) volume File absent, 2) vginit File absent  
 
 ToDO:
 * Implement nfs security
