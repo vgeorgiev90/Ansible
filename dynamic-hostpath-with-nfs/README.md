@@ -6,7 +6,7 @@ Workflow:
 4. Mount the exported share on the worker for hostPath based k8s pod volumes
 
 Prereqs:
-* Ansible to be installed , Ubuntu OS, user ansible on the system and distributed key pair for it
+* Ansible installed, nfs-server node , Ubuntu OS, user ansible on the system and distributed key pair for it
 
 Usage:
 * run.sh gen-vars    ---    To generate some variables for ansible this creates file in hosts/ dir for multiple provisions
