@@ -9,7 +9,7 @@
 
 - name: restart the server
   service: name=nfs-server state=restarted enabled=yes
-- pause: seconds=30
+- pause: seconds=10
 
 - include_tasks: add.yml  
   when: state == 'present'
