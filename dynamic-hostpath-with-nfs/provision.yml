@@ -2,7 +2,7 @@
 - hosts: nfs-server
   remote_user: ansible
   become: yes
-  connection: local
+  connection: ssh
   gather_facts: no
   roles:
     - lvm-provision
