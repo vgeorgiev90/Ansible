@@ -9,6 +9,7 @@ usage () {
   echo ""
   echo "run.sh vginit example present/absent ---> Create/Remove volume group from vars file  "
   echo "run.sh volume example present/absent ---> Create/Remove logical volume from vars file"
+  echo "run.sh mount example resent/absent   ---> Mount the volume on workers only           "
   echo "run.sh gen-vars                      ---> Generate vars file for ansible to use,     "
   echo "                                          file name to be passed to vginit or volume "
   echo ""
