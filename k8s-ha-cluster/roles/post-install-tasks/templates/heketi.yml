@@ -1,10 +1,13 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: heketi-deploy
   namespace: kube-system
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: heketi-deploy
   template:
     metadata:
       labels:
