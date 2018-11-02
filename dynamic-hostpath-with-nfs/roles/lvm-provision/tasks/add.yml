@@ -18,3 +18,5 @@
 - shell: mount -a
   when: state == 'present'
 
+- shell: Change owner to nfsnobody
+  shell: chown -R nfsnobody:nfsnobody "{{ mount_name }}"
