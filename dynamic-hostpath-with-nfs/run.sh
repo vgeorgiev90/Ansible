@@ -91,6 +91,24 @@ mount_name=${mount_name}
 work_dir=${work_dir}
 nfs_server=${nfs_server}
 EOF
+
+elif [ "${1}" == 'mount' ];then
+file="${2}"
+state="${3}"
+case ${state} in
+'present')
+        ansible-playbook -i hosts/${file} nfs-export.yml --extra-vars "state=present"
+        ansible-playbook -i hosts/${file} workers-mount.yml --extra-vars "state=present"
+        ;;
+'absent')
+        ansible-playbook -i hosts/${file} workers-mount.yml --extra-vars "state=absent"
+        ansible-playbook -i hosts/${file} nfs-export.yml --extra-vars "state=absent"
+        ;;
+*)
+        usage
+        ;;
+esac
+
 else
 	usage
 
