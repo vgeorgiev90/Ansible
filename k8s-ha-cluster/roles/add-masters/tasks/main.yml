@@ -13,7 +13,7 @@
   template: src=../templates/kubeadm-config.yaml dest=/etc/kubernetes/kubeadm-config.yaml
 
 - name: Join the cluster as master
-  shell: kubeadm init --config /etc/kubernetes/kubeadm-config.yaml
+  shell: kubeadm init --config /etc/kubernetes/kubeadm-config.yaml --ignore-preflight-errors=all
 
 - name: Clean up
   shell: rm /root/kube-certs.tgz -rf && mkdir /root/.kube && cp /etc/kubernetes/admin.conf /root/.kube/config
