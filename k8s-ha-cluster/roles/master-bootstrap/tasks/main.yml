@@ -10,7 +10,7 @@
   template: src=../templates/kubeadm-config.yaml dest=/etc/kubernetes/kubeadm-config.yaml
 
 - name: Bootstrap the first master node
-  shell: kubeadm init --config /etc/kubernetes/kubeadm-config.yaml
+  shell: kubeadm init --config /etc/kubernetes/kubeadm-config.yaml --ignore-preflight-errors=all
 
 - name: Fetch kubernetes certificates for other mater nodes
   archive:
