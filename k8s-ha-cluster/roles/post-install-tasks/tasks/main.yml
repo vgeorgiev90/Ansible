@@ -11,6 +11,7 @@
   file:
     path: /root/post-install
     state: directory
+    owner: root
 
 - name: Copy tempalte for sa
   template: src=../templates/tiller-sa.yml dest=/root/post-install/tiller-sa.yml
@@ -56,12 +57,6 @@
 - file:
     path: /etc/heketi
     state: directory
-    
-- name: Create directory for post install tasks
-  file:
-    path: /root/post-install
-    state: directory
-    owner: root
 
 - template: src=../templates/storage-class-template.yml dest=/root/post-install/storage-class-template.yml
 
