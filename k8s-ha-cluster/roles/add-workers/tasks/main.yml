@@ -1,6 +1,7 @@
 - name: Get the worker join token
-  shell: kubeadm token create --print-join-command > /root/join && echo "$(cat join) --ignore-preflight-errors=all" > /root/join
+  shell: kubeadm token create --print-join-command > /root/join && echo "$(cat /root/join) --ignore-preflight-errors=all" > /root/join
   delegate_to: "{{ master_ip }}"
+  run_once: true
 
 - name: Fetch join command
   fetch:
