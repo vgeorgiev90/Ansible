@@ -12,5 +12,4 @@
 
 - name: Reload firewalld
   shell: |
-    firewall-cmd --permanent --add-masquerade
     firewall-cmd --reload
