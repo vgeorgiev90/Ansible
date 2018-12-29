@@ -1,0 +1,21 @@
+- name: Get kubelet binaries
+  shell: |
+    wget https://github.com/containernetworking/plugins/releases/download/v0.6.0/cni-plugins-amd64-v0.6.0.tgz
+    wget https://storage.googleapis.com/kubernetes-release/release/{{ version }}/bin/linux/amd64/kubelet
+    wget https://storage.googleapis.com/kubernetes-release/release/{{ version }}/bin/linux/amd64/kube-proxy
+    chmod +x kubelet kube-proxy
+    mv kubelet kube-proxy /usr/local/bin
+
+- name: Create worker directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - /etc/cni/net.d 
+  - /opt/cni/bin 
+  - /var/lib/kubelet 
+  - /var/lib/kube-proxy 
+  - /var/lib/kubernetes 
+  - /var/run/kubernetes
+
+- shell: tar -xvf cni-plugins-amd64-v0.6.0.tgz -C /opt/cni/bin/

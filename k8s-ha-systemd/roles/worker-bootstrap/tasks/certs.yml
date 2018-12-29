@@ -1,0 +1,22 @@
+- name: Get certificates and kubeconfigs
+  copy:
+    src: /root/k8s-certificates/ca.pem
+    dest: /var/lib/kubernetes/ca.pem
+
+- copy:
+    src: /root/k8s-certificates/bootstrap.kubeconfig
+    dest: /var/lib/kubelet/bootstrap.kubeconfig
+
+- template:
+    src: ../templates/kubelet-config.yml
+    dest: /var/lib/kubelet/kubelet-config.yml
+
+- copy:
+    src: /root/k8s-certificates/kube-proxy.kubeconfig
+    dest: /var/lib/kube-proxy/kubeconfig
+
+- template:
+    src: ../templates/kube-proxy-config.yml
+    dest: /var/lib/kube-proxy/kube-proxy-config.yml
+
+

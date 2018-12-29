@@ -1,0 +1,17 @@
+- shell: cfssl gencert -initca /root/k8s-certificates/ca-csr.json | cfssljson -bare /root/k8s-certificates/ca
+
+- shell: cfssl gencert -ca=/root/k8s-certificates/ca.pem -ca-key=/root/k8s-certificates/ca-key.pem -config=/root/k8s-certificates/ca-config.json -profile=kubernetes /root/k8s-certificates/{{ item }} | cfssljson -bare /root/k8s-certificates/{{ item }}
+  with_items:
+    - "ca-csr.json"
+    - "admin-csr.json"
+    - "controller-manager-csr.json"
+    - "proxy-csr.json"
+    - "sa-csr.json"
+    - "scheduler-csr.json"
+
+- shell: cfssl gencert -ca=/root/k8s-certificates/ca.pem -ca-key=/root/k8s-certificates/ca-key.pem -config=/root/k8s-certificates/ca-config.json -hostname={{ etcd_peer_hostnames }} -profile=kubernetes /root/k8s-certificates/etcd-api-csr.json | cfssljson -bare /root/k8s-certificates/etcd-api-csr.json
+
+- shell: cfssl gencert -ca=/root/k8s-certificates/ca.pem -ca-key=/root/k8s-certificates/ca-key.pem -config=/root/k8s-certificates/ca-config.json -hostname={{ etcd_api_hostnames }} -profile=kubernetes /root/k8s-certificates/etcd-peer-csr.json | cfssljson -bare /root/k8s-certificates/etcd-peer-csr.json
+
+- shell: cfssl gencert -ca=/root/k8s-certificates/ca.pem -ca-key=/root/k8s-certificates/ca-key.pem -config=/root/k8s-certificates/ca-config.json -hostname={{ api_cert_hostnames }} -profile=kubernetes /root/k8s-certificates/api-csr.json | cfssljson -bare /root/k8s-certificates/api-csr.json
+

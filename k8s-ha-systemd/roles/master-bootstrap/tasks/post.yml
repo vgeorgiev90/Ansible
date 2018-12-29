@@ -1,0 +1,8 @@
+- name: Create role binding for kubelet tls bootstrap
+  copy:
+    src: ../templates/bootstrap-role
+    dest: /root/bootstrap.role
+
+- shell: kubectl apply -f /root/bootstrap.role
+  run_once: true
+

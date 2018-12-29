@@ -1,0 +1,28 @@
+---
+- hosts: localhost
+  user: root
+  connection: local
+  gather_facts: true
+  roles:
+  - gen-pki
+
+- hosts: etcd
+  user: root
+  connection: local
+  gather_facts: true
+  roles:
+  - etcd
+
+- hosts: masters
+  user: root
+  connection: ssh
+  gather_facts: true
+  roles:
+  - master-bootstrap
+
+- hosts: workers
+  user: root
+  connection: ssh
+  gather_facts: true
+  roles:
+  - worker-bootstrap

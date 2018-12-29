@@ -1,0 +1,7 @@
+- include_tasks: docker.yml
+
+- include_tasks: binaries.yml
+
+- include_tasks: certs.yml
+
+- include_tasks: service.yml

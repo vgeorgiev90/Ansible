@@ -1,0 +1,20 @@
+- name: Disable swap for kubelet
+  shell: swapoff -a
+- shell: cp /etc/fstab /etc/fstab.backup && sed -i 's/\/swap/#\/swap/' /etc/fstab
+
+- copy:
+    src: ../files/k8s.conf
+    dest: /etc/sysctl.d/k8s.conf
+
+- name: kubelet systemd service
+  template:
+    src: ../templates/kubelet.service
+    dest: /etc/systemd/system/kubelet.service
+
+- template:
+    src: ../templates/kube-proxy.service
+    dest: /etc/systemd/system/kube-proxy.service
+
+- shell: systemctl daemon-reload
+- service: name=kubelet state=restarted enabled=yes
+- service: name=kube-proxy state=restarted enabled=yes

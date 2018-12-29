@@ -1,0 +1,11 @@
+- name: Get kubernetes controll plane
+  shell: |
+    wget https://storage.googleapis.com/kubernetes-release/release/{{ version }}/bin/linux/amd64/kubectl
+    wget https://storage.googleapis.com/kubernetes-release/release/{{ version }}/bin/linux/amd64/kube-apiserver 
+    wget https://storage.googleapis.com/kubernetes-release/release/{{ version }}/bin/linux/amd64/kube-controller-manager 
+    wget https://storage.googleapis.com/kubernetes-release/release/{{ version }}/bin/linux/amd64/kube-scheduler
+
+- shell: |
+    chmod +x kube-apiserver kube-controller-manager kube-scheduler kubectl
+    mv kube-apiserver kube-controller-manager kube-scheduler kubectl /usr/local/bin
+

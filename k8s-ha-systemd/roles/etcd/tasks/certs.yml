@@ -1,0 +1,25 @@
+- name: Get controll-plane certs
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - /etc/etcd
+  - /var/lib/etcd
+
+
+#### Etcd certificates
+- copy:
+    src: /root/k8s-certificates/{{ item }}
+    dest: /etc/etcd
+    owner: root
+    group: root
+    mode: 0600
+  with_items:
+  - ca.pem
+  - etcd-api-csr.json-key.pem
+  - etcd-api-csr.json.pem
+  - etcd-peer-csr.json.pem
+  - etcd-peer-csr.json-key.pem
+
+
+

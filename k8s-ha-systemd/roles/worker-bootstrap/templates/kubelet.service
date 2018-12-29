@@ -1,0 +1,17 @@
+[Unit]
+Description=Kubernetes Kubelet
+Documentation=https://github.com/kubernetes/kubernetes
+After=docker.service
+Requires=docker.service
+
+[Service]
+Environment="KUBELET_CONFIG_ARGS=--cloud-provider= --cert-dir=/var/lib/kubelet --config=/var/lib/kubelet/kubelet-config.yml --container-runtime=docker --docker-endpoint=unix:///var/run/docker.sock --image-pull-progress-deadline=2m --kubeconfig=/var/lib/kubelet/kubeconfig --network-plugin=cni --register-node=true --v=0 --hostname-override={{ hostvars[inventory_hostname]['ansible_nodename'] }} --allow-privileged=true --bootstrap-kubeconfig=/var/lib/kubelet/bootstrap.kubeconfig"
+
+WorkingDirectory=/var/lib/kubelet
+ExecStart=/usr/local/bin/kubelet $KUBELET_CONFIG_ARGS
+
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

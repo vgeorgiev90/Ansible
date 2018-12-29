@@ -1,0 +1,26 @@
+- include_tasks: cfssl.yml
+
+- name: Ensure certificate directory is present
+  file:
+    state: directory
+    path: /root/k8s-certificates
+
+- name: Copy templates and generate certificates
+  copy: 
+    src: ../templates/{{ item }}
+    dest: /root/k8s-certificates/{{ item }}
+  with_items:
+    - "ca-csr.json"
+    - "admin-csr.json"
+    - "controller-manager-csr.json"
+    - "ca-config.json"
+    - "api-csr.json"
+    - "etcd-api-csr.json"
+    - "etcd-peer-csr.json"
+    - "proxy-csr.json"
+    - "sa-csr.json"
+    - "scheduler-csr.json"
+
+- include_tasks: certs.yml
+
+- include_tasks: kubeconfigs.yml

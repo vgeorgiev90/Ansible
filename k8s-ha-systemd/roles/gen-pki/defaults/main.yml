@@ -1,0 +1,11 @@
+---  ### default variables for PKI certificates
+
+api_cert_hostnames: 10.32.0.1,127.0.0.1,localhost,master1,192.168.1.9,master2,192.168.1.8,kubernetes.default.svc.cluster.local,kubernetes.default
+
+etcd_api_hostnames: 127.0.0.1,localhost,master1,master2,192.168.1.9,192.168.1.8
+
+etcd_peer_hostnames: 127.0.0.1,localhost,master1,master2,192.168.1.9,192.168.1.8
+  
+kube_addr: 192.168.1.1
+
+token: 59819324ca0b4080b217a85a59a83986

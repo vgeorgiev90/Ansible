@@ -1,0 +1,18 @@
+[Unit]
+Description=Kubernetes API Server
+Documentation=https://github.com/kubernetes/kubernetes
+
+[Service]
+Environment="KUBE_API_ARGS=--advertise-address={{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }} --allow-privileged=true --apiserver-count=1 --audit-log-maxage=30 --audit-log-maxbackup=3 --audit-log-maxsize=100 --audit-log-path=/var/log/audit.log --authorization-mode=Node,RBAC --bind-address=0.0.0.0 --enable-swagger-ui=true --etcd-servers={{ etcd_servers }} --event-ttl=1h --experimental-encryption-provider-config=/var/lib/kubernetes/encryption-config.yml --kubelet-https=true --runtime-config=api/all --service-cluster-ip-range=10.32.0.0/24 --service-node-port-range=30000-32767 --kubelet-preferred-address-types=InternalIP,InternalDNS,Hostname,ExternalIP,ExternalDNS --enable-bootstrap-token-auth=true --token-auth-file=/var/lib/kubernetes/.token-auth"
+
+Environment="KUBE_ADMISSION_ARGS=--enable-admission-plugins=Initializers,NamespaceLifecycle,NodeRestriction,LimitRanger,ServiceAccount,DefaultStorageClass,ResourceQuota"
+
+Environment="KUBE_CERTS=--client-ca-file=/var/lib/kubernetes/ca.pem --etcd-cafile=/var/lib/kubernetes/ca.pem --etcd-certfile=/var/lib/kubernetes/etcd-api-csr.json.pem --etcd-keyfile=/var/lib/kubernetes/etcd-api-csr.json-key.pem --kubelet-certificate-authority=/var/lib/kubernetes/ca.pem --kubelet-client-certificate=/var/lib/kubernetes/api-csr.json.pem --kubelet-client-key=/var/lib/kubernetes/api-csr.json-key.pem --service-account-key-file=/var/lib/kubernetes/sa-csr.json-key.pem --tls-cert-file=/var/lib/kubernetes/api-csr.json.pem --tls-private-key-file=/var/lib/kubernetes/api-csr.json-key.pem"
+
+ExecStart=/usr/local/bin/kube-apiserver $KUBE_API_ARGS $KUBE_ADMISSION_ARGS $KUBE_CERTS
+
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

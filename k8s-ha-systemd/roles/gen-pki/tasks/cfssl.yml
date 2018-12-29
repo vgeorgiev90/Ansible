@@ -1,0 +1,12 @@
+- name: Install cfssl
+  shell: wget -q --show-progress --https-only --timestamping "{{ item }}"
+  with_items:
+  - https://pkg.cfssl.org/R1.2/cfssl_linux-amd64 
+  - https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64
+  - https://storage.googleapis.com/kubernetes-release/release/v1.12.3/bin/linux/amd64/kubectl
+
+- shell: chmod +x cfssl_linux-amd64 cfssljson_linux-amd64 kubectl
+- shell: |
+    mv cfssl_linux-amd64 /usr/local/bin/cfssl
+    mv cfssljson_linux-amd64 /usr/local/bin/cfssljson
+    mv kubectl /usr/local/bin

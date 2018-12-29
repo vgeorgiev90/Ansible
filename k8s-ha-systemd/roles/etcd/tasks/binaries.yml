@@ -1,0 +1,8 @@
+- name: Get etcd binary
+  shell: wget https://github.com/coreos/etcd/releases/download/v3.3.10/etcd-v3.3.10-linux-amd64.tar.gz --directory-prefix=/root
+
+- shell: |
+    tar -xvzf /root/etcd-v3.3.10-linux-amd64.tar.gz -C /root
+    chmod +x /root/etcd-v3.3.10-linux-amd64/etcd*
+    mv /root/etcd-v3.3.10-linux-amd64/etcd* /usr/local/bin
+

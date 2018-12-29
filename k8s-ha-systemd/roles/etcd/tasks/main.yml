@@ -1,0 +1,12 @@
+- include_tasks: certs.yml
+
+- include_tasks: binaries.yml
+
+- name: Create systemd service file
+  template:
+    src: ../templates/etcd.service
+    dest: /etc/systemd/system/etcd.service
+
+- shell: systemctl daemon-reload
+- name: Start etcd service
+  service: name=etcd state=restarted enabled=yes

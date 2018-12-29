@@ -1,0 +1,40 @@
+- name: Get controll-plane certs
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - /var/lib/kubernetes 
+  - /var/run/kubernetes 
+  - /etc/kubernetes/config
+  - /root/.kube
+
+- copy:
+    src: ../templates/encryption-config.yml
+    dest: /var/lib/kubernetes/encryption-config.yml
+    mode: 0600
+
+#### Api server certificates
+- copy:
+    src: /root/k8s-certificates/{{ item }}
+    dest: /var/lib/kubernetes/{{ item }}
+    owner: root
+    group: root
+    mode: 0600
+  with_items:
+  - ca-key.pem
+  - ca.pem
+  - api-csr.json-key.pem
+  - api-csr.json.pem
+  - etcd-api-csr.json.pem
+  - etcd-api-csr.json-key.pem
+  - kube-controller-manager.kubeconfig
+  - kube-scheduler.kubeconfig
+  - sa-csr.json-key.pem
+  - sa-csr.json.pem
+
+- copy:
+    src: /root/k8s-certificates/admin.kubeconfig
+    dest: /root/.kube/config
+    owner: root
+    group: root
+    mode: 0600
