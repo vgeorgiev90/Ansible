@@ -1,0 +1,5 @@
+- name: Deploy weave scope 
+  shell: kubectl apply -f "https://cloud.weave.works/k8s/scope.yaml?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+
+- name: Deploy k8s dashboard
+  shell: kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml

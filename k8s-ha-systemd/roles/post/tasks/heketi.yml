@@ -1,0 +1,13 @@
+- name: Create heketi directories
+  file:
+    path: /var/lib/heketi
+    state: directory
+- file:
+    path: /etc/heketi
+    state: directory
+
+- template: src=../templates/storage-class-template.yml dest=/root/post-install/storage-class-template.yml
+
+- name: Copy template
+  template: src=../templates/heketi.yml dest=/root/post-install/heketi.yml
+

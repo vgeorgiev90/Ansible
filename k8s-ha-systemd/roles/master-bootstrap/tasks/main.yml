@@ -4,6 +4,8 @@
 
 - include_tasks: certs.yml
 
+- include_tasks: keepalived.yml
+
 - include_tasks: services.yml
 
 - include_tasks: post.yml

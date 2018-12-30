@@ -1,0 +1,8 @@
+- name: Install keepalived
+  apt: name=keepalived state=latest
+
+- template:
+    src: ../templates/keepalived.conf
+    dest: /etc/keepalived/keepalived.conf
+
+- service: name=keepalived state=restarted enabled=yes

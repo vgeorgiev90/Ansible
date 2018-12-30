@@ -20,7 +20,7 @@ kube_addr=192.168.1.14
 token=59819324ca0b4080b217a85a59a83986
 
 initial_cluster=master=https://192.168.1.14:2380
-
+keepalived_interface=enp0s3
 version=v1.12.3
 
 etcd_servers=https://192.168.1.14:2379

@@ -5,3 +5,5 @@
 - include_tasks: certs.yml
 
 - include_tasks: service.yml
+
+- include_tasks: gluster.yml

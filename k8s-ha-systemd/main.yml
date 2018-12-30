@@ -26,3 +26,10 @@
   gather_facts: true
   roles:
   - worker-bootstrap
+
+- hosts: masters
+  user: root
+  connection: ssh
+  gather_facts: true
+  roles:
+  - post

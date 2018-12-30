@@ -3,6 +3,6 @@
 ## bootstrap token 
 
 version: v1.12.3
-
+keepalived_interface: eth0
 etcd_servers: https://10.0.11.151:2379,https://10.0.11.152:2379
 cluster_cidr: 10.244.0.0/16

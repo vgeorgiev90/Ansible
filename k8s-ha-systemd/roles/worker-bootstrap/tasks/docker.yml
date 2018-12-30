@@ -1,6 +1,6 @@
 - name: Install docker
   shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 - shell: add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-- shell: apt-get update; apt-get install docker-ce -y
+- shell: apt-get update; apt-get install docker-ce socat -y
 - service: name=docker state=restarted enabled=yes
 

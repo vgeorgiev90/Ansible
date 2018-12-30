@@ -1,0 +1,22 @@
+- name: Install helm to the cluster
+  shell: |
+    wget https://storage.googleapis.com/kubernetes-helm/helm-v2.12.1-linux-amd64.tar.gz -P /root
+    tar -xzf /root/helm-v2.12.1-linux-amd64.tar.gz -C /root
+    cp /root/linux-amd64/helm /usr/local/bin
+    rm /root/helm* -rf
+    rm /root/linux-* -rf
+
+- name: Create rbac for tiller
+  shell: |
+    kubectl create serviceaccount tiller --namespace kube-system
+    kubectl create clusterrolebinding tiller --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+
+- name: Install tiller
+  shell: helm init --service-account=tiller
+
+- name: Approve kubelet serving certs
+  shell: for i in $(kubectl get csr | grep csr | awk '{print $1}'); do kubectl certificate approve ${i};done
+
+- pause: seconds=30
+
+

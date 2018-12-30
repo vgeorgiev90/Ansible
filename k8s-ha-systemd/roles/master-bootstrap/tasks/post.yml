@@ -2,7 +2,14 @@
   copy:
     src: ../templates/bootstrap-role
     dest: /root/bootstrap.role
+  run_once: true
 
 - shell: kubectl apply -f /root/bootstrap.role
   run_once: true
 
+- name: Install weave CNI provider
+  shell: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')&env.ipalloc_range={{ cluster_cidr }}"
+  run_once: true  
+
+- shell: kubectl create -f https://storage.googleapis.com/kubernetes-the-hard-way/kube-dns.yaml
+  run_once: true

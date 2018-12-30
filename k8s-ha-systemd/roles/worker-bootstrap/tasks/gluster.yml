@@ -1,0 +1,16 @@
+- name: Add gluster repo
+  shell: add-apt-repository ppa:gluster/glusterfs-4.1 -y && apt-get update
+- apt: name=glusterfs-server state=latest
+- apt: name=glusterfs-client state=latest
+- apt: name=thin-provisioning-tools state=latest
+
+- name: Enable and start glusterd service
+  service: name=glusterd state=restarted enabled=yes
+
+- name: Make sure that /root/.ssh exists
+  file:
+    path: /root/.ssh
+    state: directory
+    owner: root
+    group: root
+    mode: 0700

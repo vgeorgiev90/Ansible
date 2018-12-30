@@ -1,0 +1,24 @@
+- file:
+    path: /root/post-install
+    state: directory
+  run_once: true
+
+- copy:
+    src: ../templates/ingress.yml
+    dest: /root/post-install/ingress.yml
+  run_once: true
+
+- include_tasks: helm.yml
+  run_once: true
+
+- include_tasks: ingress.yml
+  run_once: true
+
+- include_tasks: weave.yml
+  run_once: true
+
+- include_tasks: monitoring.yml
+  run_once: true
+
+- include_tasks: heketi.yml
+  run_once: true
