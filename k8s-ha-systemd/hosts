@@ -13,17 +13,34 @@
 192.168.1.7
 
 [all:vars]
+## Hostnames for api server certificate
 api_cert_hostnames=10.32.0.1,127.0.0.1,localhost,master,192.168.1.14,kubernetes.default.svc.cluster.local,kubernetes.default
+
+## Hostnams for etcd comunication ( all controler plane nodes )
 etcd_api_hostnames=127.0.0.1,localhost,master,192.168.1.14
+
+## Hostnames for etcd peer certificates ( all etcd nodes )
 etcd_peer_hostnames=127.0.0.1,localhost,master,192.168.1.14
+
+## Address for kube api server ( keepalived VIP )
 kube_addr=192.168.1.14
+
+## Kubelet bootstrap token
 token=59819324ca0b4080b217a85a59a83986
 
+## Etcd initial cluster var
 initial_cluster=master=https://192.168.1.14:2380
+
+## Keepalived interface
 keepalived_interface=enp0s3
+
+## K8s binaries version
 version=v1.12.3
 
+## Etcd servers for kubernetes api to use separated by ,
 etcd_servers=https://192.168.1.14:2379
+
+## Cluster cidr block to be used
 cluster_cidr=10.244.0.0/16
 
 
