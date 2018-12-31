@@ -28,3 +28,5 @@
 - service: name=kube-apiserver state=restarted enabled=yes
 - service: name=kube-controller-manager state=restarted enabled=yes
 - service: name=kube-scheduler state=restarted enabled=yes
+
+- pause: seconds=30
