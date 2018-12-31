@@ -5,4 +5,4 @@
     src: ../templates/keepalived.conf
     dest: /etc/keepalived/keepalived.conf
 
-- service: name=keepalived state=restarted enabled=yes
+- service: name=keepalived state=started enabled=yes
