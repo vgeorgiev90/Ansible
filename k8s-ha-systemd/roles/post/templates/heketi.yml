@@ -18,7 +18,7 @@ spec:
         image: viktor90/heketi:latest
         env:
           - name: CLUSTER_SIZE
-            value: "{{ heketi_cluster_size }}"
+            value: "CLUSTER_SIZE"
         ports:
         - containerPort: 8080
         - containerPort: 8081
