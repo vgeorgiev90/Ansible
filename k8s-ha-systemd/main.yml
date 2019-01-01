@@ -8,7 +8,7 @@
 
 - hosts: etcd
   user: root
-  connection: local
+  connection: ssh
   gather_facts: true
   roles:
   - etcd
