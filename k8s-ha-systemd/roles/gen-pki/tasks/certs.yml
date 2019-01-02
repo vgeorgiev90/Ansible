@@ -2,7 +2,6 @@
 
 - shell: cfssl gencert -ca=/root/k8s-certificates/ca.pem -ca-key=/root/k8s-certificates/ca-key.pem -config=/root/k8s-certificates/ca-config.json -profile=kubernetes /root/k8s-certificates/{{ item }} | cfssljson -bare /root/k8s-certificates/{{ item }}
   with_items:
-    - "ca-csr.json"
     - "admin-csr.json"
     - "controller-manager-csr.json"
     - "proxy-csr.json"
