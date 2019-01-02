@@ -13,7 +13,7 @@
     dest: /etc/etcd
     owner: root
     group: root
-    mode: 0600
+    mode: 0640
   with_items:
   - ca.pem
   - etcd-api-csr.json-key.pem
