@@ -8,7 +8,7 @@
     {
       "C": "US",
       "L": "Portland",
-      "O": "etcd-api",
+      "O": "system:masters",
       "OU": "CA",
       "ST": "Oregon"
     }
