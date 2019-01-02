@@ -4,34 +4,34 @@
     dest: /var/lib/kubernetes/ca.pem
     owner: root
     group: root
-    mode: 0600
+    mode: 0640
 
 - copy:
     src: /root/k8s-certificates/bootstrap.kubeconfig
     dest: /var/lib/kubelet/bootstrap.kubeconfig
     owner: root
     group: root
-    mode: 0600
+    mode: 0640
 
 - template:
     src: ../templates/kubelet-config.yml
     dest: /var/lib/kubelet/kubelet-config.yml
     owner: root
     group: root
-    mode: 0600
+    mode: 0640
 
 - copy:
     src: /root/k8s-certificates/kube-proxy.kubeconfig
     dest: /var/lib/kube-proxy/kubeconfig
     owner: root
     group: root
-    mode: 0600
+    mode: 0640
 
 - template:
     src: ../templates/kube-proxy-config.yml
     dest: /var/lib/kube-proxy/kube-proxy-config.yml
     owner: root
     group: root
-    mode: 0600
+    mode: 0640
 
 
