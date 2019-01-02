@@ -13,3 +13,6 @@ clusterDomain: "cluster.local"
 clusterDNS: 
   - "10.32.0.10"
 runtimeRequestTimeout: "15m"
+cgroupDriver: cgroupfs
+rotateCertificates: true
+
