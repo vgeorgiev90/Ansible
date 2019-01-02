@@ -3,9 +3,7 @@ Description=etcd
 Documentation=https://github.com/coreos
 
 [Service]
-Environment="ETCD_ARGS=--name {{ hostvars[inventory_hostname]['ansible_nodename'] }} --cert-file=/etc/etcd/etcd-api-csr.json.pem --key-file=/etc/etcd/etcd-api-csr.json-key.pem --peer-cert-file=/etc/etcd/etcd-peer-csr.json.pem --peer-key-file=/etc/etcd/etcd-peer-csr.json-key.pem --trusted-ca-file=/etc/etcd/ca.pem --peer-trusted-ca-file=/etc/etcd/ca.pem --peer-client-cert-auth --client-cert-auth --initial-advertise-peer-urls https://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:2380 --listen-peer-urls https://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:2380 --listen-client-urls https://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:2379,https://127.0.0.1:2379 --advertise-client-urls https://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:2379 --initial-cluster-token etcd-cluster-0 --initial-cluster {{ initial_cluster }} --initial-cluster-state new --data-dir=/var/lib/etcd"
-
-ExecStart=/usr/local/bin/etcd $ETCD_ARGS
+ExecStart=/usr/local/bin/etcd --name {{ hostvars[inventory_hostname]['ansible_nodename'] }} --cert-file=/etc/etcd/etcd-api-csr.json.pem --key-file=/etc/etcd/etcd-api-csr.json-key.pem --peer-cert-file=/etc/etcd/etcd-peer-csr.json.pem --peer-key-file=/etc/etcd/etcd-peer-csr.json-key.pem --trusted-ca-file=/etc/etcd/ca.pem --peer-trusted-ca-file=/etc/etcd/ca.pem --peer-client-cert-auth --client-cert-auth --initial-advertise-peer-urls https://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:2380 --listen-peer-urls https://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:2380 --listen-client-urls https://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:2379,https://127.0.0.1:2379 --advertise-client-urls https://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:2379 --initial-cluster-token etcd-cluster-0 --initial-cluster {{ initial_cluster }} --initial-cluster-state new --data-dir=/var/lib/etcd
 Restart=on-failure
 RestartSec=5
 
