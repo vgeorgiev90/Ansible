@@ -1,0 +1,18 @@
+## To be executed on whichever node has p_nfsserver started in the cluster
+
+mkdir /mnt/drbd/exports/dir1
+chown nobody: /mnt/drbd/exports/dir1
+
+crm configure primitive p_exportfs_dir1 ocf:heartbeat:exportfs \
+  params clientspec=192.168.10.0/24 directory=/mnt/drbd/exports/dir1 fsid=1 \
+  unlock_on_stop=1 options=rw,sync \
+  op start interval=0s timeout=40s \
+  op stop interval=0s timeout=120s \
+  op monitor interval=10s timeout=20s
+
+crm configure order o_nfsserver-before-exportfs-dir1 \
+  inf: p_nfsserver p_exportfs_dir1
+
+crm configure colocation c_exportfs-with-nfsserver \
+  inf: p_exportfs_dir1 p_nfsserver
+

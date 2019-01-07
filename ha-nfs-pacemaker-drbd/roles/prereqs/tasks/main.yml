@@ -1,0 +1,13 @@
+- name: Install ntp
+  apt: name=ntp state=latest
+
+- name: Install drbd
+  apt: name=drbd8-utils state=latest
+
+- name: Install pacemaker
+  apt: name=pacemaker state=latest
+
+
+- service: name=ntp state=restarted enabled=yes
+- service: name=drbd state=stopped enabled=no
+

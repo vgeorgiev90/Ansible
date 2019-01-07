@@ -1,0 +1,16 @@
+- shell: mv /etc/corosync/corosync.conf /etc/corosync/corosync.backup
+
+- name: Corosync config file
+  template:
+    src: ../templates/corosync.conf
+    dest: /etc/corosync/corosync.conf
+
+- service: name=corosync state=restarted enabled=yes
+- pause: seconds=30
+- service: name=pacemaker state=restarted enabled=yes
+- pause: seconds=30
+
+- name: Additional config no quorum policy and stonith disable
+  shell: |
+    crm configure property no-quorum-policy=ignore
+    crm configure property stonith-enabled=false

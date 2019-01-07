@@ -1,0 +1,13 @@
+- name: Create drbd resources and master-slave resource
+  shell: |
+    crm configure primitive p_drbd_nfs ocf:linbit:drbd params drbd_resource=nfs op start interval=0s timeout=240s op stop interval=0s timeout=100s op monitor interval=31s timeout=20s role=Slave op monitor interval=29s timeout=20s role=Master
+    crm configure ms ms_drbd_nfs p_drbd_nfs meta master-max=1 master-node-max=1 clone-max=2 clone-node-max=1 notify=true
+  run_once: true  
+
+- name: Create pacemaker filessytem resource
+  shell: |
+    'crm configure primitive p_fs_drbd ocf:heartbeat:Filesystem params device=/dev/drbd0 directory=/kubernetes fstype=ext4 options=noatime,nodiratime op start interval="0" timeout="60s" op stop interval="0" timeout="60s" op monitor interval="20" timeout="40s"'
+    'crm configure order o_drbd_nfs-before-fs_drbd inf: ms_drbd_nfs:promote p_fs_drbd:start'
+    'crm configure colocation c_fs_drbd-with_drbd-nfs inf: p_fs_drbd ms_drbd_nfs:Master'
+
+

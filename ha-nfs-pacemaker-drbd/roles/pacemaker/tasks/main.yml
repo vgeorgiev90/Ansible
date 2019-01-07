@@ -1,0 +1,6 @@
+- include_tasks: init.yml
+
+- include_tasks: drbd.yml
+
+- include_tasks: nfs.yml
+

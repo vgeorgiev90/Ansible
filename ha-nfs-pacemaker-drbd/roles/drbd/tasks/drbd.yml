@@ -1,0 +1,22 @@
+- name: drbd resource template
+  template:
+    src: ../templates/disk.res
+    dest: /etc/drbd.d/disk.res
+
+
+- name: Create drbd meta data
+  shell: drbdadm create-md nfs && drbdadm up nfs
+
+- shell: drbdadm -- --clear-bitmap new-current-uuid nfs/0
+  run_once: true
+
+- name: Make fs on the device
+  shell: |
+    drbdadm primary nfs
+    mkfs.ext4 /dev/drbd0
+    drbdadm secondary nfs
+  run_once: true
+
+- file:
+    path: /kubernetes
+    state: directory

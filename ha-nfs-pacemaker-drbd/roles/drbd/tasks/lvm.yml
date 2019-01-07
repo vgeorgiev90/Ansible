@@ -1,0 +1,9 @@
+- name: Set up lvm device for drbd
+  lvg:
+    vg: drbd
+    pvs: "{{ device }}"
+
+- lvol:
+    vg: drbd
+    lv: replicated
+    size: +100%FREE

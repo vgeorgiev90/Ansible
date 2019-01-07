@@ -1,0 +1,8 @@
+---
+
+
+node1: nfs1
+node2: nfs2
+ip1: 10.0.11.120
+ip2: 10.0.11.121
+device: /dev/sdb

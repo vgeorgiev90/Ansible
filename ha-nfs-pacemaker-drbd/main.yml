@@ -1,0 +1,22 @@
+---
+
+- hosts: all
+  remote_user: root
+  connection: ssh
+  gather_facts: false
+  roles:
+  - prereqs
+
+- hosts: all
+  remote_user: root
+  connection: ssh
+  gather_facts: false
+  roles:
+  - drbd
+
+- hosts: all
+  remote_user: root
+  connection: ssh
+  gather_facts: false
+  roles:
+  - pacemaker
