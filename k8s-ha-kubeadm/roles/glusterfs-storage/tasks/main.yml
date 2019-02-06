@@ -1,5 +1,5 @@
 - name: Add gluster repo
-  shell: add-apt-repository ppa:gluster/glusterfs-3.13 -y && apt-get update
+  shell: add-apt-repository ppa:gluster/glusterfs-4.1 -y && apt-get update
 - apt: name=glusterfs-server state=latest
 - apt: name=glusterfs-client state=latest
 - apt: name=thin-provisioning-tools state=latest
