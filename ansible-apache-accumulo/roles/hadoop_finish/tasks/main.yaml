@@ -1,0 +1,5 @@
+- name: Format HDFS on the master node
+  shell: /home/hadoop/hadoop/bin/hdfs namenode -format
+
+- name: Start daemons
+  shell: /home/hadoop/hadoop/bin/start-dfs.sh

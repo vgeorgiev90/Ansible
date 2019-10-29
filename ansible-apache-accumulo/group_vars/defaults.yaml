@@ -1,0 +1,14 @@
+---
+
+hadoop_public_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCyKSQH8/qRJ4wjvZCj4l2oZYCnTZyBcHBt46EgLoh3GkTXmw2FeVXn3rraPkt1ilAaV5m2OGPq73XM/4Q2CXIP4RzxFK4HSLuk94irCQjwxGzSz8kVsywUVhJtsnrMQcPE8ntJl2PLzp2skXBdVzVfyh7mrZ3zleqK4mCsqITqjUY9kvVD7lQojFHrrxWHePGXkFYVY+AVT7p+mpv7nGOxz0U4j/Q7VnvaahLpP2Rt/hh7ZJiEI9Pz9CT+MxmXpEfAjVIkHa+nmBILnq+n0kYKA7xKBx/6lIvwroh6aK/w8o1kDYLaL+Gk8aCCZCz8eCW9Ar5FVj6PbGiptntgIuxv"
+
+hadoop_worker_nodes_count: 3
+
+hadoop_nodes:
+  master-node: 192.168.1.10
+  node1: 192.168.1.11
+  node2: 192.168.1.12
+
+hadoop_workers:
+  - node1
+  - node2

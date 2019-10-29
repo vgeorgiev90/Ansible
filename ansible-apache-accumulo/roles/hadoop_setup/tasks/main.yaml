@@ -1,0 +1,39 @@
+- name: Get hadoop binaries and extract
+  shell: |
+    wget http://apache.cbox.biz/hadoop/common/hadoop-3.2.1/hadoop-3.2.1.tar.gz -P /home/hadoop
+    tar -xzf /home/hadoop/hadoop-3.2.1.tar.gz -C /home/hadoop 
+    mv /home/hadoop/hadoop-3.2.1 /home/hadoop/hadoop
+
+- name: Copy config files
+  template:
+    src: ../templates/core-site.xml
+    dest: /home/hadoop/hadoop/etc/hadoop/core-site.xml
+    owner: hadoop
+    group: hadoop
+
+- template:
+    src: ../templates/hdfs-site.xml
+    dest: /home/hadoop/hadoop/etc/hadoop/hdfs-site.xml
+    owner: hadoop
+    group: hadoop
+
+- template:
+    src: ../templates/mapred-site.xml
+    dest: /home/hadoop/hadoop/etc/hadoop/mapred-site.xml
+    owner: hadoop
+    group: hadoop
+
+- template:
+    src: ../templates/yarn-site.xml
+    dest: /home/hadoop/hadoop/etc/hadoop/yarn-site.xml
+    owner: hadoop
+    group: hadoop
+
+- name: Set java home
+  shell: echo "export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre" >> /home/hadoop/hadoop/etc/hadoop/hadoop-env.sh
+  
+- name: Configure Workers
+  shell: echo "{{ item }}" >> /home/hadoop/hadoop/etc/hadoop/workers
+  with_items: "{{ hadoop_workers }}"
+
+- shell: chown -R hadoop:hadoop /home/hadoop/hadoop

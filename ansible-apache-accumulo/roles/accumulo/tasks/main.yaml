@@ -1,0 +1,31 @@
+- name: Download and extract Apache Accumulo
+  shell: |
+    wget http://apache.cbox.biz/accumulo/2.0.0/accumulo-2.0.0-bin.tar.gz -P /home/hadoop
+    tag -xzf /home/hadoop/accumulo-2.0.0-bin.tar.gz -C /home/hadoop
+    mv /home/hadoop/accumulo-2.0.0 /home/hadoop/accumulo
+
+- name: Copy config files
+  template:
+    src: ../templates/accumulo-env.sh
+    dest: /home/hadoop/accumulo/conf/accumulo-env.sh
+    owner: hadoop
+    group: hadoop
+    mode: 0600
+
+- template:
+    src: ../templates/accumulo.properties
+    dest: /home/hadoop/accumulo/conf/accumulo.properties
+    owner: hadoop
+    group: hadoop
+    mode: 0600
+
+- template:
+    src: ../templates/masters
+    dest: /home/hadoop/accumulo/conf/masters
+    owner: hadoop
+    group: hadoop
+    mode: 0600
+
+- shell: echo "{{ item }}" >> /home/hadoop/accumulo/conf/tservers
+  with_items: "{{ hadoop_workers }}"
+

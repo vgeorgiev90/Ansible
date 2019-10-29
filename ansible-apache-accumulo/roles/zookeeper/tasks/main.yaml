@@ -1,0 +1,22 @@
+- name: Get zookeeper binaries
+  shell: |
+    wget http://apache.cbox.biz/zookeeper/zookeeper-3.5.6/apache-zookeeper-3.5.6.tar.gz -P /home/hadoop
+    tar -xzf /home/hadoop/apache-zookeeper-3.5.6.tar.gz -C /home/hadoop
+    mv /home/hadoop/apache-zookeeper-3.5.6 /home/hadoop/zookeeper
+
+- name: Copy zookeeper config file
+  template:
+    src: ../templates/zoo.cfg
+    dest: /home/hadoop/zookeeper/conf/zoo.cfg
+    owner: hadoop
+    group: hadoop
+
+- name: Create zookeeper snapshot directory
+  file:
+    path: /home/hadoop/zoo
+    state: directory
+    owner: hadoop
+    group: hadoop
+
+- name: Start zookeeper server
+  shell: /home/hadoop/zookeeper/bin/zkServer.sh start

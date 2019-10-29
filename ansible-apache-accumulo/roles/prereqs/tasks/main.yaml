@@ -1,0 +1,49 @@
+- name: Disable IPv6
+  copy:
+    src: ../templates/disable_ipv6.conf
+    dest: /etc/sysctl.d/disable_ipv6.conf
+    owner: root
+    group: root
+
+- name: Install Java SDK
+  yum:
+    pkg: java-1.8.0-openjdk
+    state: installed
+
+- name: Create hadoop directory
+  file:
+    path: /var/lib/hadoop_data
+    state: directory
+
+- file:
+    path: /var/lib/hadoop_namenode
+    state: directory
+
+- name: Add all nodes to /etc/hosts
+  shell: echo "{{ item.key }}  {{ item.value }}" >> /etc/hosts
+  with_dict: "{{ hadoop_nodes }}"
+
+- name: Create hadoop user
+  user:
+    name: hadoop
+    shell: /bin/bash
+    home: /home/hadoop
+    create_home: true
+
+- file:
+    path: /home/hadoop/.ssh
+    owner: hadoop
+    group: hadoop
+    mode: 0700
+
+- file:
+    src: ./files/id_rsa
+    dest: /home/hadoop/.ssh/id_rsa
+    owner: hadoop
+    group: hadoop
+    mode: 0600
+
+- shell: |
+     echo "{{ hadoop_public_key }}" >> /home/hadoop/.ssh/authorized_keys 
+     chown hadoop:hadoop /home/hadoop/.ssh/authorized_keys 
+     chmod 0644 /home/hadoop/.ssh/authorized_keys
